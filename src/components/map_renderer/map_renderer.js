@@ -1,4 +1,4 @@
-import {useEffect, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {getTileSet, tileTypeToImageKey} from "../../model/map";
 
 function MapRenderer ({map, width, height}) {
@@ -8,7 +8,7 @@ function MapRenderer ({map, width, height}) {
     const [tileSet, setTileSet] = useState(undefined);
     const [image, setImage] = useState(undefined);
 
-    const render = () => {
+    const render = useCallback(() => {
         console.log("RENDER", image, map);
         if (canvasRef.current == null)
             return;
@@ -26,7 +26,7 @@ function MapRenderer ({map, width, height}) {
                 strokeRect(ctx, tilePosition, cellSize);
             })
         })
-    }
+    });
 
 
     const drawTile = (ctx, tile, tilePosition, cellSize) => {

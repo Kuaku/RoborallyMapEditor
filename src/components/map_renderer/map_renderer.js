@@ -26,7 +26,7 @@ function MapRenderer ({map, width, height}) {
                 strokeRect(ctx, tilePosition, cellSize);
             })
         })
-    });
+    }, []);
 
 
     const drawTile = (ctx, tile, tilePosition, cellSize) => {

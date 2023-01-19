@@ -1,25 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import Header from "./components/header/header";
+import {useState} from "react";
+import StartMenu from "./components/start_menu/start_menu";
+import {create_new_map} from "./model/map";
+import Editor from "./components/editor/editor";
+
 
 function App() {
-  return (
+
+    const [map, setMap] = useState(undefined);
+
+    const create_new_map_cb = () => {
+        setMap(create_new_map());
+    }
+
+
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+        <Header></Header>
+        {
+            map === undefined ?
+                    <StartMenu create_new_cb={create_new_map_cb}/> :
+                    <Editor map={map}></Editor>
+        }
     </div>
-  );
+    );
 }
 
 export default App;

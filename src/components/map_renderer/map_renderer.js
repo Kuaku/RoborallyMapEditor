@@ -11,7 +11,7 @@ function MapRenderer ({map, width, height}) {
     const drawTile = useCallback((ctx, tile, tilePosition, cellSize) => {
         let image_key = tileTypeToImageKey(tile);
         drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
-    }, [image, tileSet])
+    }, [image, tileSet, drawImage])
 
     const render = useCallback(() => {
         console.log("RENDER", image, map);

@@ -8,6 +8,10 @@ function MapRenderer ({map, width, height}) {
     const [tileSet, setTileSet] = useState(undefined);
     const [image, setImage] = useState(undefined);
 
+    const drawImage = useCallback((ctx, image, sourcePosition, sourceSize, destPosition, destSize) => {
+        ctx.drawImage(image, sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
+        }, [])
+    
     const drawTile = useCallback((ctx, tile, tilePosition, cellSize) => {
         let image_key = tileTypeToImageKey(tile);
         drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
@@ -40,9 +44,6 @@ function MapRenderer ({map, width, height}) {
         ctx.strokeRect(position.x, position.y, size.width, size.height);
     }
 
-    const drawImage = useCallback((ctx, image, sourcePosition, sourceSize, destPosition, destSize) => {
-        ctx.drawImage(image, sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
-    }, [])
 
 
     useEffect(() => {

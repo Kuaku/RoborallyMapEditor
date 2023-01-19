@@ -8,6 +8,12 @@ function MapRenderer ({map, width, height}) {
     const [tileSet, setTileSet] = useState(undefined);
     const [image, setImage] = useState(undefined);
 
+    const drawTile = (ctx, tile, tilePosition, cellSize) => {
+        let image_key = tileTypeToImageKey(tile);
+        console.log(tileSet, image_key)
+        drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
+    }
+
     const render = useCallback(() => {
         console.log("RENDER", image, map);
         if (canvasRef.current == null)
@@ -26,14 +32,10 @@ function MapRenderer ({map, width, height}) {
                 strokeRect(ctx, tilePosition, cellSize);
             })
         })
-    }, []);
+    }, [drawTile, height, width, map, image]);
 
 
-    const drawTile = (ctx, tile, tilePosition, cellSize) => {
-        let image_key = tileTypeToImageKey(tile);
-        console.log(tileSet, image_key)
-        drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
-    }
+
 
     const strokeRect = (ctx, position, size) => {
         ctx.strokeRect(position.x, position.y, size.width, size.height);

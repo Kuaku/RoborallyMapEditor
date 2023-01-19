@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TileSet path="/tileMaps/tiles_tileset.png">
+    <Tile key="OPEN_FLOOR">
+        <position x="64" y="0"/>
+        <position x="128" y="64"/>
+    </Tile>
+    <Tile key="WALL_NONE_UP">
+        <position x="128" y="0"/>
+        <position x="192" y="64"/>
+    </Tile>
+    <Tile key="WALL_NONE_DOWN">
+        <position x="192" y="0"/>
+        <position x="256" y="64"/>
+    </Tile>
+    <Tile key="WALL_NONE_LEFT">
+        <position x="256" y="0"/>
+        <position x="320" y="64"/>
+    </Tile>
+    <Tile key="WALL_NONE_RIGHT">
+        <position x="320" y="0"/>
+        <position x="384" y="64"/>
+    </Tile>
+    <Tile key="PIT">
+        <position x="384" y="0"/>
+        <position x="448" y="64"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_TURN_DOWN">
+        <position x="448" y="0"/>
+        <position x="512" y="64"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_TURN_UP">
+        <position x="0" y="64"/>
+        <position x="64" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_TURN_RIGHT">
+        <position x="64" y="64"/>
+        <position x="128" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_TURN_LEFT">
+        <position x="128" y="64"/>
+        <position x="192" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_TURN_DOWN">
+        <position x="192" y="64"/>
+        <position x="256" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_TURN_LEFT">
+        <position x="256" y="64"/>
+        <position x="320" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_TURN_UP">
+        <position x="320" y="64"/>
+        <position x="384" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_TURN_RIGHT">
+        <position x="384" y="64"/>
+        <position x="448" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_STRAIGHT">
+        <position x="448" y="64"/>
+        <position x="512" y="128"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_STRAIGHT">
+        <position x="0" y="128"/>
+        <position x="64" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_STRAIGHT">
+        <position x="64" y="128"/>
+        <position x="128" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_STRAIGHT">
+        <position x="128" y="128"/>
+        <position x="192" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_JOIN_LEFT">
+        <position x="192" y="128"/>
+        <position x="256" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_JOIN_RIGHT">
+        <position x="256" y="128"/>
+        <position x="320" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_JOIN_DOWN">
+        <position x="320" y="128"/>
+        <position x="384" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_JOIN_UP">
+        <position x="384" y="128"/>
+        <position x="448" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_JOIN_RIGHT">
+        <position x="448" y="128"/>
+        <position x="512" y="192"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_JOIN_LEFT">
+        <position x="0" y="192"/>
+        <position x="64" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_JOIN_UP">
+        <position x="64" y="192"/>
+        <position x="128" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_JOIN_DOWN">
+        <position x="128" y="192"/>
+        <position x="192" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_UP_MERGE">
+        <position x="192" y="192"/>
+        <position x="256" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_DOWN_MERGE">
+        <position x="256" y="192"/>
+        <position x="320" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_LEFT_MERGE">
+        <position x="320" y="192"/>
+        <position x="384" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_EXPRESS_RIGHT_MERGE">
+        <position x="384" y="192"/>
+        <position x="448" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_TURN_DOWN">
+        <position x="448" y="192"/>
+        <position x="512" y="256"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_TURN_UP">
+        <position x="0" y="256"/>
+        <position x="64" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_TURN_RIGHT">
+        <position x="64" y="256"/>
+        <position x="128" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_TURN_LEFT">
+        <position x="128" y="256"/>
+        <position x="192" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_TURN_DOWN">
+        <position x="192" y="256"/>
+        <position x="256" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_TURN_LEFT">
+        <position x="256" y="256"/>
+        <position x="320" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_TURN_UP">
+        <position x="320" y="256"/>
+        <position x="384" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_TURN_RIGHT">
+        <position x="384" y="256"/>
+        <position x="448" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_STRAIGHT">
+        <position x="448" y="256"/>
+        <position x="512" y="320"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_STRAIGHT">
+        <position x="0" y="320"/>
+        <position x="64" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_STRAIGHT">
+        <position x="64" y="320"/>
+        <position x="128" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_STRAIGHT">
+        <position x="128" y="320"/>
+        <position x="192" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_JOIN_LEFT">
+        <position x="192" y="320"/>
+        <position x="256" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_JOIN_RIGHT">
+        <position x="256" y="320"/>
+        <position x="320" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_JOIN_DOWN">
+        <position x="320" y="320"/>
+        <position x="384" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_JOIN_UP">
+        <position x="384" y="320"/>
+        <position x="448" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_JOIN_RIGHT">
+        <position x="448" y="320"/>
+        <position x="512" y="384"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_JOIN_LEFT">
+        <position x="0" y="384"/>
+        <position x="64" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_JOIN_UP">
+        <position x="64" y="384"/>
+        <position x="128" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_JOIN_DOWN">
+        <position x="128" y="384"/>
+        <position x="192" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_UP_MERGE">
+        <position x="192" y="384"/>
+        <position x="256" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_DOWN_MERGE">
+        <position x="256" y="384"/>
+        <position x="320" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_LEFT_MERGE">
+        <position x="320" y="384"/>
+        <position x="384" y="448"/>
+    </Tile>
+    <Tile key="CONV_BELT_NORMAL_RIGHT_MERGE">
+        <position x="384" y="384"/>
+        <position x="448" y="448"/>
+    </Tile>
+    <Tile key="GEAR_RIGHT">
+        <position x="448" y="384"/>
+        <position x="512" y="448"/>
+    </Tile>
+    <Tile key="GEAR_LEFT">
+        <position x="0" y="448"/>
+        <position x="64" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_ONE_ALL_UP">
+        <position x="64" y="448"/>
+        <position x="128" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_ONE_ALL_DOWN">
+        <position x="128" y="448"/>
+        <position x="192" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_ONE_ALL_LEFT">
+        <position x="192" y="448"/>
+        <position x="256" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_ONE_ALL_RIGHT">
+        <position x="256" y="448"/>
+        <position x="320" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_TWO_ALL_UP">
+        <position x="320" y="448"/>
+        <position x="384" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_TWO_ALL_DOWN">
+        <position x="384" y="448"/>
+        <position x="448" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_TWO_ALL_LEFT">
+        <position x="448" y="448"/>
+        <position x="512" y="512"/>
+    </Tile>
+    <Tile key="LASER_BEAM_TWO_ALL_RIGHT">
+        <position x="0" y="512"/>
+        <position x="64" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_THREE_ALL_UP">
+        <position x="64" y="512"/>
+        <position x="128" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_THREE_ALL_DOWN">
+        <position x="128" y="512"/>
+        <position x="192" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_THREE_ALL_EFT">
+        <position x="192" y="512"/>
+        <position x="256" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_THREE_ALL_RIGHT">
+        <position x="256" y="512"/>
+        <position x="320" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_1_ANIMATION_VERTICAL">
+        <position x="320" y="512"/>
+        <position x="384" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_1_ANIMATION_HORIZONTAL">
+        <position x="384" y="512"/>
+        <position x="448" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_2_ANIMATION_VERTICAL">
+        <position x="448" y="512"/>
+        <position x="512" y="576"/>
+    </Tile>
+    <Tile key="LASER_BEAM_2_ANIMATION_HORIZONTAL">
+        <position x="0" y="576"/>
+        <position x="64" y="640"/>
+    </Tile>
+    <Tile key="LASER_BEAM_3_ANIMATION_VERTICAL">
+        <position x="64" y="576"/>
+        <position x="128" y="640"/>
+    </Tile>
+    <Tile key="LASER_BEAM_3_ANIMATION_HORIZONTAL">
+        <position x="128" y="576"/>
+        <position x="192" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_EVEN_UP">
+        <position x="192" y="576"/>
+        <position x="256" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_EVEN_DOWN">
+        <position x="256" y="576"/>
+        <position x="320" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_EVEN_LEFT">
+        <position x="320" y="576"/>
+        <position x="384" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_EVEN_RIGHT">
+        <position x="384" y="576"/>
+        <position x="448" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_ODD_UP">
+        <position x="448" y="576"/>
+        <position x="512" y="640"/>
+    </Tile>
+    <Tile key="PUSHER_ODD_DOWN">
+        <position x="0" y="640"/>
+        <position x="64" y="704"/>
+    </Tile>
+    <Tile key="PUSHER_ODD_LEFT">
+        <position x="64" y="640"/>
+        <position x="128" y="704"/>
+    </Tile>
+    <Tile key="PUSHER_ODD_RIGHT">
+        <position x="128" y="640"/>
+        <position x="192" y="704"/>
+    </Tile>
+    <Tile key="REPAIR_SITE_TWO">
+        <position x="192" y="640"/>
+        <position x="256" y="704"/>
+    </Tile>
+    <Tile key="REPAIR_SITE_ONE">
+        <position x="256" y="640"/>
+        <position x="320" y="704"/>
+    </Tile>
+    <Tile key="FLAG_ONE">
+        <position x="320" y="640"/>
+        <position x="384" y="704"/>
+    </Tile>
+    <Tile key="FLAG_TWO">
+        <position x="384" y="640"/>
+        <position x="448" y="704"/>
+    </Tile>
+    <Tile key="FLAG_THREE">
+        <position x="448" y="640"/>
+        <position x="512" y="704"/>
+    </Tile>
+    <Tile key="FLAG_FOUR">
+        <position x="0" y="704"/>
+        <position x="64" y="768"/>
+    </Tile>
+    <Tile key="FLAG_FIVE">
+        <position x="64" y="704"/>
+        <position x="128" y="768"/>
+    </Tile>
+    <Tile key="FLAG_SIX">
+        <position x="128" y="704"/>
+        <position x="192" y="768"/>
+    </Tile>
+    <Tile key="FLAG_SEVEN">
+        <position x="192" y="704"/>
+        <position x="256" y="768"/>
+    </Tile>
+    <Tile key="FLAG_EIGHT">
+        <position x="256" y="704"/>
+        <position x="320" y="768"/>
+    </Tile>
+    <Tile key="DOCK_ONE">
+        <position x="320" y="704"/>
+        <position x="384" y="768"/>
+    </Tile>
+    <Tile key="DOCK_TWO">
+        <position x="384" y="704"/>
+        <position x="448" y="768"/>
+    </Tile>
+    <Tile key="DOCK_THREE">
+        <position x="448" y="704"/>
+        <position x="512" y="768"/>
+    </Tile>
+    <Tile key="DOCK_FOUR">
+        <position x="0" y="768"/>
+        <position x="64" y="832"/>
+    </Tile>
+    <Tile key="DOCK_FIVE">
+        <position x="64" y="768"/>
+        <position x="128" y="832"/>
+    </Tile>
+    <Tile key="DOCK_SIX">
+        <position x="128" y="768"/>
+        <position x="192" y="832"/>
+    </Tile>
+    <Tile key="DOCK_SEVEN">
+        <position x="192" y="768"/>
+        <position x="256" y="832"/>
+    </Tile>
+    <Tile key="DOCK_EIGHT">
+        <position x="256" y="768"/>
+        <position x="320" y="832"/>
+    </Tile>
+</TileSet>

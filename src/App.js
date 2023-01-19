@@ -3,6 +3,7 @@ import Header from "./components/header/header";
 import {useState} from "react";
 import StartMenu from "./components/start_menu/start_menu";
 import {create_new_map} from "./model/map";
+import Editor from "./components/editor/editor";
 
 
 function App() {
@@ -20,7 +21,7 @@ function App() {
         {
             map == undefined ?
                     <StartMenu create_new_cb={create_new_map_cb}/> :
-                    undefined
+                    <Editor map={map}></Editor>
         }
     </div>
     );

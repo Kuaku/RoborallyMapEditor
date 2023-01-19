@@ -19,7 +19,7 @@ function App() {
     <div className="App">
         <Header></Header>
         {
-            map == undefined ?
+            map === undefined ?
                     <StartMenu create_new_cb={create_new_map_cb}/> :
                     <Editor map={map}></Editor>
         }

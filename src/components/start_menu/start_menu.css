@@ -1,0 +1,13 @@
+.start_menu_container {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+}
+
+.start_menu_container button,
+.start_menu_container input{
+    width: 90%;
+}

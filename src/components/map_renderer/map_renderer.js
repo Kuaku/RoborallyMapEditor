@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from "react";
-import {getTileImage, getTileSet, tileTypeToImageKey} from "../../model/map";
+import {getTileSet, tileTypeToImageKey} from "../../model/map";
 
 function MapRenderer ({map, width, height}) {
 
@@ -47,12 +47,12 @@ function MapRenderer ({map, width, height}) {
 
     useEffect(() => {
         render();
-    }, [image])
+        }, [image, render])
 
 
     useEffect(() => {
         render();
-        }, [tileSet])
+        }, [tileSet, render])
 
     const loadTileSet = async () => {
         const tileSet = await getTileSet();

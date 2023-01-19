@@ -13,18 +13,7 @@ const TILE_TYPES = {
     Flag: 7,
 }
 
-const ALL_TILES = [
-    {
-        tile_type: TILE_TYPES.OpenFloor
-    },
-    {
-        tile_type: TILE_TYPES.Pit
-    },
-]
 
-let tileSet = {};
-
-let isInit = false;
 
 const getTileSet = () => {
     return new Promise((resolve) => {
@@ -32,6 +21,7 @@ const getTileSet = () => {
         axios.get("/tiles.xml").then(xml_string => {
             let xml = new XMLParser().parseFromString(xml_string.data);
             let tiles = xml.getElementsByTagName("Tile");
+            let tileSet = {};
             [...tiles].forEach(tile => {
                 let key = tile.attributes.key;
                 tileSet[key] = {
@@ -48,14 +38,6 @@ const getTileSet = () => {
 
             console.log(tileSet);
             resolve(tileSet);
-        })
-    })
-}
-
-const getTileImage = () => {
-    return new Promise(resolve => {
-        axios.get("/tiles_tileset.png").then(res => {
-            console.log(res);
         })
     })
 }
@@ -78,6 +60,7 @@ const tileTypeToImageKey = (tile) => {
     switch (tile.tile_type) {
         case TILE_TYPES.OpenFloor: return "OPEN_FLOOR";
         case TILE_TYPES.Pit: return "PIT";
+        default: return "";
     }
 }
 
@@ -88,4 +71,4 @@ const create_new_tile = () => {
 }
 
 
-export {create_new_map, TILE_TYPES, getTileSet, getTileImage, tileTypeToImageKey}
+export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey}

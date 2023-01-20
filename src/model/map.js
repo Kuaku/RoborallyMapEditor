@@ -18,7 +18,7 @@ const TILE_TYPES = {
 const getTileSet = () => {
     return new Promise((resolve) => {
         console.log("Initialise tileset");
-        axios.get("/tiles.xml").then(xml_string => {
+        axios.get("/RoborallyMapEditor/tiles.xml").then(xml_string => {
             let xml = new XMLParser().parseFromString(xml_string.data);
             let tiles = xml.getElementsByTagName("Tile");
             let tileSet = {};

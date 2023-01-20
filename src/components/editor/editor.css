@@ -1,7 +1,8 @@
 .editor {
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr 400px;
-    grid-template-rows: 1fr;
+    grid-template-rows: 100%;
     grid-column-gap: 0px;
     grid-row-gap: 0px;
 }

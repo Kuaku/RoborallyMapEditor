@@ -1,7 +1,7 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import {getTileSet, tileTypeToImageKey} from "../../model/map";
 
-function MapRenderer ({map, width, height}) {
+function MapRenderer ({map, width, height, changeTileRequest}) {
 
 
     const canvasRef = useRef(null);
@@ -70,6 +70,23 @@ function MapRenderer ({map, width, height}) {
         image.src = "/RoborallyMapEditor/tiles_tileset.png";
     }
 
+    const allowDrop = (ev) => {
+        ev.preventDefault();
+    }
+
+    const drop = (ev) => {
+        ev.preventDefault();
+        const cellSize = {width: width/map.tiles.length, height: height/map.tiles[0].length};
+        const canvasSize = canvasRef.current.getBoundingClientRect();
+        const position = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
+        const tilePosition = {x: parseInt((position.x-cellSize.width)/cellSize.width), y: parseInt((position.y-cellSize.height)/cellSize.height)};
+        const tile = JSON.parse(ev.dataTransfer.getData("text"));
+        if (tilePosition.x >= 0 && tilePosition.x < map.tiles.length && tilePosition.y >= 0 && tilePosition.y < map.tiles[0].length) {
+            changeTileRequest(tilePosition, tile);
+        }
+        //console.log(JSON.parse(ev.dataTransfer.getData("text")));
+    }
+
     useEffect(() => {
         loadTileSet();
         loadImage();
@@ -79,7 +96,7 @@ function MapRenderer ({map, width, height}) {
         return (<></>);
 
     return (<>
-    <canvas ref={canvasRef} width={width} height={height}></canvas>
+    <canvas onDragOver={allowDrop} onDrop={drop} ref={canvasRef} width={width} height={height}></canvas>
     </>)
 }
 

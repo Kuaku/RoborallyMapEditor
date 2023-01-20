@@ -13,7 +13,14 @@ const TILE_TYPES = {
     Flag: 7,
 }
 
-
+const ALL_TILES = [
+    {
+        tile_type: TILE_TYPES.OpenFloor
+    },
+    {
+        tile_type: TILE_TYPES.Pit
+    },
+];
 
 const getTileSet = () => {
     return new Promise((resolve) => {
@@ -71,4 +78,4 @@ const create_new_tile = () => {
 }
 
 
-export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey}
+export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey, ALL_TILES}

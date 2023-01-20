@@ -9,6 +9,7 @@ function MapRenderer ({map, width, height, changeTileRequest}) {
     const [image, setImage] = useState(undefined);
 
     const drawImage = useCallback((ctx, image, sourcePosition, sourceSize, destPosition, destSize) => {
+        console.log(sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
         ctx.drawImage(image, sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
         }, [])
     

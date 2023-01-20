@@ -13,6 +13,60 @@ const TILE_TYPES = {
     Flag: 7,
 }
 
+const getImageKeys = [
+    //OpenFloor
+    (_tile) => {
+        return "OPEN_FLOOR"
+    },
+    //Gear
+    (tile) => {
+        return "";
+    },
+    //NormalStraightConveyorBelt
+    (tile) => {
+        switch (tile.direction) {
+            case DIRECTIONS.UP: return "CONV_BELT_NORMAL_UP_STRAIGHT"
+            case DIRECTIONS.DOWN: return "CONV_BELT_NORMAL_DOWN_STRAIGHT"
+            case DIRECTIONS.LEFT: return "CONV_BELT_NORMAL_LEFT_STRAIGHT"
+            case DIRECTIONS.RIGHT: return "CONV_BELT_NORMAL_RIGHT_STRAIGHT"
+            default: return "";
+        }
+    },
+    //ExpressStraightConveyorBelt
+    (tile) => {
+        switch (tile.direction) {
+            case DIRECTIONS.UP: return "CONV_BELT_EXPRESS_UP_STRAIGHT"
+            case DIRECTIONS.DOWN: return "CONV_BELT_EXPRESS_DOWN_STRAIGHT"
+            case DIRECTIONS.LEFT: return "CONV_BELT_EXPRESS_LEFT_STRAIGHT"
+            case DIRECTIONS.RIGHT: return "CONV_BELT_EXPRESS_RIGHT_STRAIGHT"
+            default: return "";
+        }
+    },
+    //NormalTurnConveyorBelt
+    (tile) => {
+        return "";
+    },
+    //ExpressTurnConveyorBelt
+    (tile) => {
+        return "";
+    },
+    //Pit
+    (_tile) => {
+        return "PIT";
+    },
+    //Flag
+    (tile) => {
+        return "";
+    },
+]
+
+const DIRECTIONS = {
+    UP: 0,
+    DOWN: 1,
+    LEFT: 2,
+    RIGHT: 3,
+}
+
 const ALL_TILES = [
     {
         tile_type: TILE_TYPES.OpenFloor
@@ -20,6 +74,38 @@ const ALL_TILES = [
     {
         tile_type: TILE_TYPES.Pit
     },
+    {
+        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+        direction: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+        direction: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+        direction: DIRECTIONS.LEFT
+    },
+    {
+        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+        direction: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+        direction: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+        direction: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+        direction: DIRECTIONS.LEFT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+        direction: DIRECTIONS.RIGHT
+    }
 ];
 
 const getTileSet = () => {
@@ -64,11 +150,7 @@ const create_new_map = () => {
 }
 
 const tileTypeToImageKey = (tile) => {
-    switch (tile.tile_type) {
-        case TILE_TYPES.OpenFloor: return "OPEN_FLOOR";
-        case TILE_TYPES.Pit: return "PIT";
-        default: return "";
-    }
+    return getImageKeys[tile.tile_type](tile);
 }
 
 const create_new_tile = () => {

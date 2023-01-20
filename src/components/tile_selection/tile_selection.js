@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from "react";
 import {ALL_TILES, getTileSet, tileTypeToImageKey} from "../../model/map";
+import "./tile_selection.css";
 
 function TileSelection() {
 
@@ -14,6 +15,8 @@ function TileSelection() {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext('2d');
             const imageRef = tileSet[tileTypeToImageKey(tile)];
+            canvas.width = imageRef.size.width;
+            canvas.height = imageRef.size.height;
             ctx.drawImage(image, imageRef.position.x, imageRef.position.y, imageRef.size.width, imageRef.size.height, 0, 0, imageRef.size.width, imageRef.size.height);
             return {src: canvas.toDataURL(), tile};
         })
@@ -60,13 +63,13 @@ function TileSelection() {
 
     console.log(allTiles);
 
-    return (<>
+    return (<div className={"tile-selection"}>
     {
         allTiles.map((tileData, i) => {return (<>
         <img key={`tile-selection-${i}`} alt={`tile ${JSON.stringify(tileData.tile)} could not be loaded`} onDragStart={ev => {dragTile(ev, tileData.tile)}} draggable={true} src={tileData.src}></img>
         </>)})
     }
-    </>);
+    </div>);
 }
 
 export default TileSelection;

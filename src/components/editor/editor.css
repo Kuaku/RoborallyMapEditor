@@ -1,0 +1,10 @@
+.editor {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    grid-template-rows: 1fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+}
+
+.editor-selection-area { grid-area: 1 / 2 / 2 / 3; }
+.editor-map-area { grid-area: 1 / 1 / 2 / 2; }

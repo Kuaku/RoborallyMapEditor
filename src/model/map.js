@@ -11,7 +11,20 @@ const TILE_TYPES = {
     ExpressTurnConveyorBelt: 5,
     Pit: 6,
     Flag: 7,
+    Dock: 8,
+    RepairSite: 9,
 }
+
+const directionToString = (direction) => {
+    switch (direction) {
+        case DIRECTIONS.UP: return  "UP";
+        case DIRECTIONS.DOWN: return  "DOWN";
+        case DIRECTIONS.LEFT: return  "LEFT";
+        case DIRECTIONS.RIGHT: return "RIGHT";
+        default: return "";
+    }
+}
+
 
 const getImageKeys = [
     //OpenFloor
@@ -20,35 +33,23 @@ const getImageKeys = [
     },
     //Gear
     (tile) => {
-        return "";
+        return `GEAR_${directionToString(tile.direction)}`;
     },
     //NormalStraightConveyorBelt
     (tile) => {
-        switch (tile.direction) {
-            case DIRECTIONS.UP: return "CONV_BELT_NORMAL_UP_STRAIGHT"
-            case DIRECTIONS.DOWN: return "CONV_BELT_NORMAL_DOWN_STRAIGHT"
-            case DIRECTIONS.LEFT: return "CONV_BELT_NORMAL_LEFT_STRAIGHT"
-            case DIRECTIONS.RIGHT: return "CONV_BELT_NORMAL_RIGHT_STRAIGHT"
-            default: return "";
-        }
+        return `CONV_BELT_NORMAL_${directionToString(tile.direction)}_STRAIGHT`;
     },
     //ExpressStraightConveyorBelt
     (tile) => {
-        switch (tile.direction) {
-            case DIRECTIONS.UP: return "CONV_BELT_EXPRESS_UP_STRAIGHT"
-            case DIRECTIONS.DOWN: return "CONV_BELT_EXPRESS_DOWN_STRAIGHT"
-            case DIRECTIONS.LEFT: return "CONV_BELT_EXPRESS_LEFT_STRAIGHT"
-            case DIRECTIONS.RIGHT: return "CONV_BELT_EXPRESS_RIGHT_STRAIGHT"
-            default: return "";
-        }
+        return `CONV_BELT_EXPRESS_${directionToString(tile.direction)}_STRAIGHT`;
     },
     //NormalTurnConveyorBelt
     (tile) => {
-        return "";
+        return `CONV_BELT_NORMAL_${directionToString(tile.sourceDirection)}_TURN_${directionToString(tile.direction)}`;
     },
     //ExpressTurnConveyorBelt
     (tile) => {
-        return "";
+        return `CONV_BELT_EXPRESS_${directionToString(tile.sourceDirection)}_TURN_${directionToString(tile.direction)}`;
     },
     //Pit
     (_tile) => {
@@ -56,7 +57,15 @@ const getImageKeys = [
     },
     //Flag
     (tile) => {
-        return "";
+        return `FLAG_${tile.variant}`;
+    },
+    //Dock
+    (tile) => {
+        return `DOCK_${tile.variant}`;
+        },
+    //RepairSote
+    (tile) => {
+        return `REPAIR_SITE_${tile.variant}`;
     },
 ]
 
@@ -75,6 +84,86 @@ const ALL_TILES = [
         tile_type: TILE_TYPES.Pit
     },
     {
+        tile_type: TILE_TYPES.RepairSite,
+        variant: "ONE"
+    },
+    {
+        tile_type: TILE_TYPES.RepairSite,
+        variant: "TWO"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "ONE"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "TWO"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "THREE"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "FOUR"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "FIVE"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "SIX"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "SEVEN"
+    },
+    {
+        tile_type: TILE_TYPES.Flag,
+        variant: "EIGHT"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "ONE"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "TWO"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "THREE"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "FOUR"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "FIVE"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "SIX"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "SEVEN"
+    },
+    {
+        tile_type: TILE_TYPES.Dock,
+        variant: "EIGHT"
+    },
+    {
+        tile_type: TILE_TYPES.Gear,
+        direction: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.Gear,
+        direction: DIRECTIONS.LEFT
+    },
+    {
         tile_type: TILE_TYPES.NormalStraightConveyorBelt,
         direction: DIRECTIONS.UP
     },
@@ -105,6 +194,86 @@ const ALL_TILES = [
     {
         tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
         direction: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.RIGHT,
+        sourceDirection: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.LEFT,
+        sourceDirection: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.RIGHT,
+        sourceDirection: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.LEFT,
+        sourceDirection: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.DOWN,
+        sourceDirection: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.DOWN,
+        sourceDirection: DIRECTIONS.LEFT
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.UP,
+        sourceDirection: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+        direction: DIRECTIONS.UP,
+        sourceDirection: DIRECTIONS.LEFT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.RIGHT,
+        sourceDirection: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.LEFT,
+        sourceDirection: DIRECTIONS.DOWN
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.RIGHT,
+        sourceDirection: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.LEFT,
+        sourceDirection: DIRECTIONS.UP
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.DOWN,
+        sourceDirection: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.DOWN,
+        sourceDirection: DIRECTIONS.LEFT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.UP,
+        sourceDirection: DIRECTIONS.RIGHT
+    },
+    {
+        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+        direction: DIRECTIONS.UP,
+        sourceDirection: DIRECTIONS.LEFT
     }
 ];
 

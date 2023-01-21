@@ -1,5 +1,3 @@
-import XMLParser from 'react-xml-parser';
-import axios from 'axios';
 const STANDARD_SIZE = {width: 10, height: 10};
 
 const TILE_TYPES = {
@@ -13,6 +11,11 @@ const TILE_TYPES = {
     Flag: 7,
     Dock: 8,
     RepairSite: 9,
+}
+
+const PROP_TYPES = {
+    Wall: 0,
+    LaserBeam: 1,
 }
 
 const directionToString = (direction) => {
@@ -37,7 +40,18 @@ const enumerate_map = (map, cb) => {
     })
 }
 
-const getImageKeys = [
+const getImageKeysProp = [
+    //Wall
+    (prop) => {
+        return `WALL_NONE_${directionToString(prop.position)}`;
+    },
+    //LaserBeam
+    (prop) => {
+        return `LASER_BEAM_${prop.variant}_ALL_${directionToString(prop.position)}`
+    }
+]
+
+const getImageKeysTile = [
     //OpenFloor
     (_tile) => {
         return "OPEN_FLOOR"
@@ -86,6 +100,65 @@ const DIRECTIONS = {
     LEFT: 2,
     RIGHT: 3,
 }
+
+const ALL_PROPS = [
+    {
+        prop_type: PROP_TYPES.Wall,
+        position: DIRECTIONS.UP
+    },
+    {
+        prop_type: PROP_TYPES.Wall,
+        position: DIRECTIONS.LEFT
+    },
+    {
+        prop_type: PROP_TYPES.Wall,
+        position: DIRECTIONS.DOWN
+    },
+    {
+        prop_type: PROP_TYPES.Wall,
+        position: DIRECTIONS.RIGHT
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.UP,
+        variant: "ONE"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.LEFT,
+        variant: "ONE"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.DOWN,
+        variant: "ONE"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.RIGHT,
+        variant: "ONE"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.UP,
+        variant: "TWO"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.LEFT,
+        variant: "TWO"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.DOWN,
+        variant: "TWO"
+    },
+    {
+        prop_type: PROP_TYPES.LaserBeam,
+        position: DIRECTIONS.RIGHT,
+        variant: "TWO"
+    }
+]
 
 const ALL_TILES = [
     {
@@ -288,33 +361,6 @@ const ALL_TILES = [
     }
 ];
 
-const getTileSet = () => {
-    return new Promise((resolve) => {
-        console.log("Initialise tileset");
-        axios.get("/RoborallyMapEditor/tiles.xml").then(xml_string => {
-            let xml = new XMLParser().parseFromString(xml_string.data);
-            let tiles = xml.getElementsByTagName("Tile");
-            let tileSet = {};
-            [...tiles].forEach(tile => {
-                let key = tile.attributes.key;
-                tileSet[key] = {
-                    position: {
-                        x: parseInt(tile.children[0].attributes.x),
-                        y: parseInt(tile.children[0].attributes.y)
-                    },
-                    size: {
-                        width: tile.children[1].attributes.x - tile.children[0].attributes.x,
-                        height: tile.children[1].attributes.y - tile.children[0].attributes.y,
-                    }
-                }
-            })
-
-            console.log(tileSet);
-            resolve(tileSet);
-        })
-    })
-}
-
 const create_new_map = () => {
     const tiles = [];
     for (let i = 0; i < STANDARD_SIZE.width; i++) {
@@ -330,7 +376,24 @@ const create_new_map = () => {
 }
 
 const tileTypeToImageKey = (tile) => {
-    return getImageKeys[tile.tile_type](tile);
+    return getImageKeysTile[tile.tile_type](tile);
+}
+
+const propTypeToImageKey = (prop) => {
+    return getImageKeysProp[prop.prop_type](prop);
+}
+
+const TYPES = {
+    TILE: 0,
+    PROP: 1,
+}
+
+const selectionToImageKey = (selection_object) => {
+    switch (selection_object.type) {
+        case TYPES.TILE: return tileTypeToImageKey(selection_object.object);
+        case TYPES.PROP: return propTypeToImageKey(selection_object.object);
+        default: return "";
+    }
 }
 
 const create_new_tile = () => {
@@ -340,4 +403,4 @@ const create_new_tile = () => {
 }
 
 
-export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map}
+export {create_new_map, TILE_TYPES, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey}

@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {enumerate_map, tileTypeToImageKey, is_position_in_map} from "../../model/map";
+import {enumerate_map, tileTypeToImageKey, is_position_in_map, TYPES, propTypeToImageKey} from "../../model/map";
 import { useSelector, useDispatch } from 'react-redux';
 import {generate_image_tags} from "../../model/images";
-import {setTile} from "../../store/mapSlice";
+import {setTile, setProp} from "../../store/mapSlice";
 
 function MapRenderer ({width, height}) {
 
@@ -23,6 +23,12 @@ function MapRenderer ({width, height}) {
         enumerate_map(map, (tile, i, j) => {
             const tilePosition = {x: (i+1) * cellSize.width, y: (j+1) * cellSize.height};
             ctx.drawImage(images[tileTypeToImageKey(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+            if (tile.props) {
+                Object.entries(tile.props).forEach(([key, prop]) => {
+                    console.log(prop);
+                    ctx.drawImage(images[propTypeToImageKey(prop)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+                })
+            }
         })
     }, [map, images, cellSize]);
 
@@ -42,14 +48,29 @@ function MapRenderer ({width, height}) {
         ev.preventDefault();
     }
 
+    const drop_tile = (tile, tilePosition) => {
+        if (is_position_in_map(map, tilePosition)) {
+            dispatch(setTile({position: tilePosition, tile}));
+        }
+    }
+
+    const drop_prop = (prop, propPosition) => {
+        if (is_position_in_map(map, propPosition)) {
+            dispatch(setProp({position: propPosition, prop}));
+        }
+    }
+
     const drop = (ev) => {
         ev.preventDefault();
+        const selection_object = JSON.parse(ev.dataTransfer.getData("text"));
         const canvasSize = canvasRef.current.getBoundingClientRect();
         const mousePosition = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
         const tilePosition = {x: Math.floor((mousePosition.x-cellSize.width)/cellSize.width), y: Math.floor((mousePosition.y-cellSize.height)/cellSize.height)};
-        const tile = JSON.parse(ev.dataTransfer.getData("text"));
-        if (is_position_in_map(map, tilePosition)) {
-            dispatch(setTile({position: tilePosition, tile}));
+        console.log("SELECTION:", selection_object);
+        switch (selection_object.type) {
+            case TYPES.TILE: drop_tile(selection_object.object, tilePosition); break;
+            case TYPES.PROP: drop_prop(selection_object.object, tilePosition); break;
+            default: break;
         }
     }
 

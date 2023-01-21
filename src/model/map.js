@@ -25,6 +25,17 @@ const directionToString = (direction) => {
     }
 }
 
+const is_position_in_map = (map, position) => {
+    return position.x >= 0 && position.x < map.tiles.length && position.y >= 0 && position.y < map.tiles[0].length;
+}
+
+const enumerate_map = (map, cb) => {
+    map.tiles.forEach((row, i) => {
+        row.forEach((tile, j) => {
+            cb(tile, i, j);
+        })
+    })
+}
 
 const getImageKeys = [
     //OpenFloor
@@ -329,4 +340,4 @@ const create_new_tile = () => {
 }
 
 
-export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey, ALL_TILES}
+export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map}

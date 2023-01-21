@@ -1,75 +1,42 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {getTileSet, tileTypeToImageKey} from "../../model/map";
+import {enumerate_map, tileTypeToImageKey, is_position_in_map} from "../../model/map";
+import { useSelector, useDispatch } from 'react-redux';
+import {generate_image_tags} from "../../model/images";
+import {setTile} from "../../store/mapSlice";
 
-function MapRenderer ({map, width, height, changeTileRequest}) {
+function MapRenderer ({width, height}) {
 
+    const image_src = useSelector((state) => state.images.value);
+    const map = useSelector((state) => state.map.value);
+    const dispatch = useDispatch();
 
     const canvasRef = useRef(null);
-    const [tileSet, setTileSet] = useState(undefined);
-    const [image, setImage] = useState(undefined);
-
-    const drawImage = useCallback((ctx, image, sourcePosition, sourceSize, destPosition, destSize) => {
-        console.log(sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
-        ctx.drawImage(image, sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
-        }, [])
-    
-    const drawTile = useCallback((ctx, tile, tilePosition, cellSize) => {
-        let image_key = tileTypeToImageKey(tile);
-        drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
-    }, [image, tileSet, drawImage])
+    const [images, setImages] = useState(undefined);
+    const [cellSize, setCellSize] = useState({x: 0, y: 0});
 
     const render = useCallback(() => {
-        console.log("RENDER", image, map);
-        if (canvasRef.current == null)
+        if (canvasRef.current == null || images == null)
             return;
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        const cellSize = {width: width/map.tiles.length, height: height/map.tiles[0].length};
 
-        ctx.strokeStyle = "#000000";
-
-        map.tiles.forEach((row, i) => {
-            row.forEach((tile, j) => {
-                const tilePosition = {x: (i+1) * cellSize.width, y: (j+1) * cellSize.height}
-                drawTile(ctx, tile, tilePosition, cellSize);
-
-                strokeRect(ctx, tilePosition, cellSize);
-            })
+        enumerate_map(map, (tile, i, j) => {
+            const tilePosition = {x: (i+1) * cellSize.width, y: (j+1) * cellSize.height};
+            ctx.drawImage(images[tileTypeToImageKey(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
         })
-    }, [drawTile, height, width, map, image]);
+    }, [map, images, cellSize]);
 
-
-
-
-    const strokeRect = (ctx, position, size) => {
-        ctx.strokeRect(position.x, position.y, size.width, size.height);
-    }
-
-
+    useEffect(() => {
+        setCellSize({width: width/map.tiles.length, height: height/map.tiles[0].length});
+    }, [map, width, height])
 
     useEffect(() => {
         render();
-        }, [image, render])
-
+    }, [map, images, render])
 
     useEffect(() => {
-        render();
-        }, [tileSet, render])
-
-    const loadTileSet = async () => {
-        const tileSet = await getTileSet();
-        setTileSet(tileSet);
-    }
-
-    const loadImage = async () => {
-        let image = new Image();
-        console.log("IMAGE:", image);
-        image.onload = () => {
-            console.log("IMAGE:", image);
-            setImage(image);
-        };
-        image.src = "/RoborallyMapEditor/tiles_tileset.png";
-    }
+        setImages(generate_image_tags(image_src));
+    }, [image_src])
 
     const allowDrop = (ev) => {
         ev.preventDefault();
@@ -77,23 +44,16 @@ function MapRenderer ({map, width, height, changeTileRequest}) {
 
     const drop = (ev) => {
         ev.preventDefault();
-        const cellSize = {width: width/map.tiles.length, height: height/map.tiles[0].length};
         const canvasSize = canvasRef.current.getBoundingClientRect();
-        const position = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
-        const tilePosition = {x: parseInt((position.x-cellSize.width)/cellSize.width), y: parseInt((position.y-cellSize.height)/cellSize.height)};
+        const mousePosition = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
+        const tilePosition = {x: Math.floor((mousePosition.x-cellSize.width)/cellSize.width), y: Math.floor((mousePosition.y-cellSize.height)/cellSize.height)};
         const tile = JSON.parse(ev.dataTransfer.getData("text"));
-        if (tilePosition.x >= 0 && tilePosition.x < map.tiles.length && tilePosition.y >= 0 && tilePosition.y < map.tiles[0].length) {
-            changeTileRequest(tilePosition, tile);
+        if (is_position_in_map(map, tilePosition)) {
+            dispatch(setTile({position: tilePosition, tile}));
         }
-        //console.log(JSON.parse(ev.dataTransfer.getData("text")));
     }
 
-    useEffect(() => {
-        loadTileSet();
-        loadImage();
-        }, [])
-
-    if (!tileSet || !image)
+    if (!images)
         return (<></>);
 
     return (<>

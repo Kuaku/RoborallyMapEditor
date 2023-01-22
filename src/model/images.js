@@ -35,7 +35,6 @@ const generate_image = (image, position) => {
 const get_image = () => {
     return new Promise((resolve) => {
         let image = new Image();
-        console.log("IMAGE:", image);
         image.onload = () => {
             resolve(image);
         };

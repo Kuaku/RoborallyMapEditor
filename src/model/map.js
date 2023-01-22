@@ -47,13 +47,13 @@ const directionToString = (direction) => {
 }
 
 const is_position_in_map = (map, position) => {
-    return position.x >= 0 && position.x < map.tiles.length && position.y >= 0 && position.y < map.tiles[0].length;
+    return position.row >= 0 && position.row < map.tiles.length && position.col >= 0 && position.col < map.tiles[0].length;
 }
 
 const enumerate_map = (map, cb) => {
-    map.tiles.forEach((row, i) => {
-        row.forEach((tile, j) => {
-            cb(tile, i, j);
+    map.tiles.forEach((row_obj, row) => {
+        row_obj.forEach((tile, col) => {
+            cb(tile, col, row);
         })
     })
 }
@@ -381,9 +381,9 @@ const ALL_TILES = [
 
 const create_new_map = () => {
     const tiles = [];
-    for (let i = 0; i < STANDARD_SIZE.width; i++) {
+    for (let i = 0; i < STANDARD_SIZE.height; i++) {
         tiles.push([]);
-        for (let j = 0; j < STANDARD_SIZE.height; j++) {
+        for (let j = 0; j < STANDARD_SIZE.width; j++) {
             tiles[i].push(create_new_tile());
         }
     }
@@ -456,11 +456,11 @@ const map_to_xml = (map) => {
     let indent = ``;
     let xml_out = `<gameboard>\n`;
     indent += `\t`;
-    for (let i = 0; i < map.tiles[0].length; i++) {
+    for (let row = 0; row < map.tiles.length; row++) {
         xml_out += `${indent}<row>\n`;
         indent += `\t`
-        for (let j = 0; j < map.tiles.length; j++) {;
-            let tile = map.tiles[j][i];
+        for (let col = 0; col < map.tiles[row].length; col++) {;
+            let tile = map.tiles[row][col];
             xml_out += `${indent}<tile>\n`;
             indent += `\t`;
             xml_out += `${indent}<tileType>${TILE_TYPE_STRING[tile.tile_type]}</tileType>\n`;

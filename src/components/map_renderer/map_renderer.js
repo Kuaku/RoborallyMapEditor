@@ -20,12 +20,11 @@ function MapRenderer ({width, height}) {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
 
-        enumerate_map(map, (tile, i, j) => {
-            const tilePosition = {x: (i+1) * cellSize.width, y: (j+1) * cellSize.height};
+        enumerate_map(map, (tile, col, row) => {
+            const tilePosition = {x: (col+1) * cellSize.width, y: (row+1) * cellSize.height};
             ctx.drawImage(images[tileTypeToImageKey(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
             if (tile.props) {
                 Object.entries(tile.props).forEach(([key, prop]) => {
-                    console.log(prop);
                     ctx.drawImage(images[propTypeToImageKey(prop)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
                 })
             }
@@ -33,7 +32,7 @@ function MapRenderer ({width, height}) {
     }, [map, images, cellSize]);
 
     useEffect(() => {
-        setCellSize({width: width/(map.tiles.length+1), height: height/(map.tiles[0].length+1)});
+        setCellSize({width: width/(map.tiles[0].length+1), height: height/(map.tiles.length+1)});
     }, [map, width, height])
 
     useEffect(() => {
@@ -65,8 +64,7 @@ function MapRenderer ({width, height}) {
         const selection_object = JSON.parse(ev.dataTransfer.getData("text"));
         const canvasSize = canvasRef.current.getBoundingClientRect();
         const mousePosition = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
-        const tilePosition = {x: Math.floor((mousePosition.x-cellSize.width)/cellSize.width), y: Math.floor((mousePosition.y-cellSize.height)/cellSize.height)};
-        console.log("SELECTION:", selection_object);
+        const tilePosition = {col: Math.floor((mousePosition.x-cellSize.width)/cellSize.width), row: Math.floor((mousePosition.y-cellSize.height)/cellSize.height)};
         switch (selection_object.type) {
             case TYPES.TILE: drop_tile(selection_object.object, tilePosition); break;
             case TYPES.PROP: drop_prop(selection_object.object, tilePosition); break;

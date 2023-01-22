@@ -8,7 +8,6 @@ function Toolbar () {
 
     const export_map = () => {
         const xml_string = map_to_xml(map);
-        console.log(xml_string);
         const file = new Blob([xml_string], {type: 'text/plain'});
         const element = document.createElement("a");
         element.href = URL.createObjectURL(file);

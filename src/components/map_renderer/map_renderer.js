@@ -33,7 +33,7 @@ function MapRenderer ({width, height}) {
     }, [map, images, cellSize]);
 
     useEffect(() => {
-        setCellSize({width: width/map.tiles.length, height: height/map.tiles[0].length});
+        setCellSize({width: width/(map.tiles.length+1), height: height/(map.tiles[0].length+1)});
     }, [map, width, height])
 
     useEffect(() => {

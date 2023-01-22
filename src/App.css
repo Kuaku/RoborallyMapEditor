@@ -15,9 +15,9 @@
 button,
 input{
     background: transparent;
-    padding: 5px;
+    padding: 10px;
     border: 1px solid black;
-    border-radius: 15px;
+    border-radius: 20px;
     text-align-last: center;
 }
 

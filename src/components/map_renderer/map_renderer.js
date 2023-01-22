@@ -22,6 +22,7 @@ function MapRenderer ({width, height}) {
 
         enumerate_map(map, (tile, col, row) => {
             const tilePosition = {x: (col+1) * cellSize.width, y: (row+1) * cellSize.height};
+            ctx.drawImage(images[tileTypeToImageKey({tile_type: 0})], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
             ctx.drawImage(images[tileTypeToImageKey(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
             if (tile.props) {
                 Object.entries(tile.props).forEach(([key, prop]) => {

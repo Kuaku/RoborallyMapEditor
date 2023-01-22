@@ -26,6 +26,40 @@ const TILE_TYPE_STRING = [
     "RepairSite"
 ]
 
+const string_to_tile_type = (tileType) => {
+    for (let i = 0; i < TILE_TYPE_STRING.length; i++) {
+        if (TILE_TYPE_STRING[i] === tileType) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+const string_to_prop_type = (propType) => {
+    for (let i = 0; i < PROP_TYPE_STRING.length; i++) {
+        if (PROP_TYPE_STRING[i] === propType) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+const xml_tile_to_tile_obj = (tile) => {
+    const tile_type = string_to_tile_type(tile.getElementsByTagName("tileType")[0].innerHTML);
+    const tile_obj = initTileType[tile_type](tile);
+    const props = tile.getElementsByTagName("props")[0];
+
+    if (props !== undefined && props.children.length > 0) {
+        tile_obj.props = {};
+        for (let i = 0; i < props.children.length; i++) {
+            const prop = props.children[i];
+            const prop_type = string_to_prop_type(prop.getElementsByTagName("propType")[0].innerHTML);
+            tile_obj.props[string_to_direction(prop.tagName)] = initPropType[prop_type](prop);
+        }
+    }
+    return tile_obj;
+}
+
 const PROP_TYPES = {
     Wall: 0,
     LaserBeam: 1,
@@ -43,6 +77,16 @@ const directionToString = (direction) => {
         case DIRECTIONS.LEFT: return  "LEFT";
         case DIRECTIONS.RIGHT: return "RIGHT";
         default: return "";
+    }
+}
+
+const string_to_direction = (str_direction) => {
+    switch (str_direction.toUpperCase()) {
+        case "UP": return DIRECTIONS.UP;
+        case "DOWN": return DIRECTIONS.DOWN;
+        case "LEFT": return DIRECTIONS.LEFT;
+        case "RIGHT": return DIRECTIONS.RIGHT;
+        default: return -1;
     }
 }
 
@@ -67,6 +111,96 @@ const getImageKeysProp = [
     (prop) => {
         return `LASER_BEAM_${prop.variant}_ALL_${directionToString(prop.position)}`
     }
+]
+const initPropType = [
+    //Wall
+    (prop) => {
+        return {
+            prop_type: PROP_TYPES.Wall,
+            position: string_to_direction(prop.tagName),
+        }
+    },
+    //LaserBeam
+    (prop) => {
+        return {
+            prop_type: PROP_TYPES.LaserBeam,
+            position: string_to_direction(prop.tagName),
+            variant: prop.getElementsByTagName("variant")[0].innerHTML,
+        }
+    }
+]
+
+const initTileType = [
+    //OpenFloor
+    (_tile) => {
+        return {
+            tile_type: TILE_TYPES.OpenFloor
+        };
+    },
+    //Gear
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.Gear,
+            direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML)
+        };
+    },
+    //NormalStraightConveyorBelt
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+            direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML)
+        };
+    },
+    //ExpressStraightConveyorBelt
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+            direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML)
+        };
+    },
+    //NormalTurnConveyorBelt
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+            direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML),
+            sourceDirection: string_to_direction(tile.getElementsByTagName("sourceDirection")[0].innerHTML)
+        };
+    },
+    //ExpressTurnConveyorBelt
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+            direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML),
+            sourceDirection: string_to_direction(tile.getElementsByTagName("sourceDirection")[0].innerHTML)
+        };
+    },
+    //Pit
+    (_tile) => {
+        return {
+            tile_type: TILE_TYPES.Pit,
+        };
+    },
+    //Flag
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.Flag,
+            variant: tile.getElementsByTagName("variant")[0].innerHTML,
+        };
+    },
+    //Dock
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.Dock,
+            variant: tile.getElementsByTagName("variant")[0].innerHTML,
+        };
+    },
+    //RepairSite
+    (tile) => {
+        return {
+            tile_type: TILE_TYPES.RepairSite,
+            variant: tile.getElementsByTagName("variant")[0].innerHTML,
+        };
+    },
 ]
 
 const getImageKeysTile = [
@@ -452,6 +586,20 @@ const prop_to_xml = (prop, indent) => {
     return xml_out;
 }
 
+const xml_to_map = (xml_string) => {
+    let xml = new DOMParser().parseFromString(xml_string, "text/xml");
+    const rows = xml.getElementsByTagName("row");
+    let map = {
+        tiles: [...rows].map((row_xml) => {
+            const row = row_xml.getElementsByTagName("tile");
+            return [...row].map((tile) => {
+                return xml_tile_to_tile_obj(tile);
+            })
+        })
+    }
+    return map;
+}
+
 const map_to_xml = (map) => {
     let indent = ``;
     let xml_out = `<gameboard>\n`;
@@ -490,4 +638,4 @@ const map_to_xml = (map) => {
     return xml_out;
 }
 
-export {create_new_map, TILE_TYPES, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey, map_to_xml}
+export {create_new_map, TILE_TYPES, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey, map_to_xml, xml_to_map}

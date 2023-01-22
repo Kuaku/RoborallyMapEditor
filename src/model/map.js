@@ -15,6 +15,53 @@ const enumerate_map = (map, cb) => {
     })
 }
 
+const change_height = (map, new_height) => {
+    console.log("CHANGE HEIGHT");
+    if (new_height < 1) {
+        new_height = 1;
+    }
+    if (map.tiles.length > new_height) {
+        map.tiles = map.tiles.slice(0, new_height);
+    } else if (map.tiles.length < new_height) {
+        console.log(map.tiles.length, new_height, map.tiles.length !== new_height)
+        while(map.tiles.length !== new_height) {
+            map.tiles.push(
+                create_row(map.tiles[0].length)
+            )
+        }
+    }
+
+    console.log("CHANGE HEIGHT FINISHED");
+    return map;
+}
+
+const change_width = (map, new_width) => {
+    if (new_width < 1) {
+        new_width = 1;
+    }
+    if (map.tiles[0].length > new_width) {
+        for (let i = 0; i < map.tiles.length; i++) {
+            map.tiles[i] = map.tiles[i].slice(0, new_width);
+        }
+    } else if (map.tiles[0].length < new_width) {
+        for (let i = 0; i < map.tiles.length; i++) {
+            while (map.tiles[i].length !== new_width) {
+                map.tiles[i].push({ tile_type: TILE_TYPES.OpenFloor });
+            }
+        }
+    }
+
+    return map;
+}
+
+const create_row = (length) => {
+    let row = [];
+    for (let j = 0; j < length; j++) {
+        row.push({ tile_type: TILE_TYPES.OpenFloor });
+    }
+    return row;
+}
+
 const create_new_map = () => {
     const tiles = [];
     for (let i = 0; i < STANDARD_SIZE.height; i++) {
@@ -58,4 +105,4 @@ const map_to_xml = (map) => {
     return parser.get_text();
 }
 
-export {create_new_map, enumerate_map, is_position_in_map, map_to_xml, xml_to_map}
+export {create_new_map, enumerate_map, is_position_in_map, map_to_xml, xml_to_map, change_height, change_width}

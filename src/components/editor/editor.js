@@ -13,7 +13,7 @@ function Editor ({ map, changeTileRequest }) {
             <Toolbar />
         </div>
         <div className={"editor-map-area"}>
-            <MapRenderer map={map} width={700} height={700} changeTileRequest={changeTileRequest}/>
+            <MapRenderer map={map} width={1000} height={1000} changeTileRequest={changeTileRequest}/>
         </div>
         <div className={"editor-tile-selection-area"}>
             <Selection type={TYPES.TILE} objects={ALL_TILES}/>

@@ -22,6 +22,8 @@ function MapRenderer ({width, height}) {
             return;
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, width, height);
 
         enumerate_map(map, (tile, col, row) => {
             const tilePosition = {x: (col+1) * cellSize.width, y: (row+1) * cellSize.height};
@@ -33,13 +35,14 @@ function MapRenderer ({width, height}) {
                 })
             }
         })
-    }, [map, images, cellSize]);
+    }, [map, images, cellSize, width, height]);
 
     useEffect(() => {
         setCellSize({width: width/(map.tiles[0].length+1), height: height/(map.tiles.length+1)});
     }, [map, width, height])
 
     useEffect(() => {
+        console.log("RENDER");
         render();
     }, [map, images, render])
 

@@ -1,10 +1,11 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {enumerate_map, is_position_in_map, TYPES} from "../../model/map";
+import {enumerate_map, is_position_in_map} from "../../model/map";
 import { useSelector, useDispatch } from 'react-redux';
 import {generate_image_tags} from "../../model/images";
 import {setTile, setProp} from "../../store/mapSlice";
 import {tile_to_image_key} from "../../model/tiles";
 import {prop_to_image_key} from "../../model/props";
+import {TYPES} from "../../model/selection";
 
 function MapRenderer ({width, height}) {
 

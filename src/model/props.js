@@ -115,4 +115,28 @@ const string_to_prop_type_obj = (prop_type_string) => {
     return undefined;
 }
 
-export { PROP_TYPES, ALL_PROPS, get_prop_type_obj, string_to_prop_type_obj, prop_to_image_key }
+const prop_to_xml = (prop, parser) => {
+    switch (prop.position) {
+        case DIRECTIONS.UP: parser.open_tag("up"); break;
+        case DIRECTIONS.DOWN: parser.open_tag("down"); break;
+        case DIRECTIONS.LEFT: parser.open_tag("left"); break;
+        case DIRECTIONS.RIGHT: parser.open_tag("right"); break;
+        default: break;
+    }
+    parser.inline_tag("propType", get_prop_type_obj(prop.prop_type).prop_type_string);
+    if (prop.variant) {
+        parser.inline_tag("variant", prop.variant);
+    }
+    switch (prop.prop_type) {
+        case PROP_TYPES.LaserBeam: parser.inline_tag("activationPhases", "ALL"); break;
+        default: parser.inline_tag("activationPhases", "NONE"); break;
+    }
+    parser.close_tag();
+}
+
+const xml_prop_to_prop_obj = (prop) => {
+    const prop_type_obj = string_to_prop_type_obj(prop.getElementsByTagName("propType")[0].innerHTML);
+    return prop_type_obj.from_xml_tile(prop);
+}
+
+export { PROP_TYPES, ALL_PROPS, get_prop_type_obj, string_to_prop_type_obj, prop_to_image_key, prop_to_xml, xml_prop_to_prop_obj }

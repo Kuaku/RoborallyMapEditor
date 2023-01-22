@@ -1,4 +1,5 @@
 import {direction_to_string, DIRECTIONS, string_to_direction} from "./directions";
+import {prop_to_xml, xml_prop_to_prop_obj} from "./props";
 
 const TILE_TYPES = {
     OpenFloor: 0,
@@ -369,5 +370,42 @@ const string_to_tile_type_obj = (tile_type_string) => {
     return undefined;
 }
 
+const tile_to_xml = (tile, parser) => {
+    parser.open_tag("tile");
+    parser.inline_tag("tileType", get_tile_type_obj(tile.tile_type).tile_type_string);
+    if (tile.variant !== undefined) {
+        parser.inline_tag("variant", tile.variant);
+    }
+    if (tile.direction !== undefined) {
+        parser.inline_tag("direction", direction_to_string(tile.direction));
+    }
+    if (tile.sourceDirection !== undefined) {
+        parser.inline_tag("sourceDirection", direction_to_string(tile.sourceDirection));
+    }
+    if (tile.props && Object.entries(tile.props).length > 0) {
+        parser.open_tag("props");
+        for (let prop in tile.props) {
+            prop_to_xml(tile.props[prop], parser);
+        }
+        parser.close_tag();
+    }
+    parser.close_tag();
+}
 
-export { TILE_TYPES, ALL_TILES, get_tile_type_obj, string_to_tile_type_obj, tile_to_image_key }
+const xml_tile_to_tile_obj = (tile) => {
+    const tile_type_obj = string_to_tile_type_obj(tile.getElementsByTagName("tileType")[0].innerHTML);
+    const tile_obj = tile_type_obj.from_xml_tile(tile);
+    const props = tile.getElementsByTagName("props")[0];
+
+    if (props !== undefined && props.children.length > 0) {
+        tile_obj.props = {};
+        for (let i = 0; i < props.children.length; i++) {
+            const prop = props.children[i];
+            const prop_obj = xml_prop_to_prop_obj(prop);
+            tile_obj.props[string_to_direction(prop.tagName)] = prop_obj;
+        }
+    }
+    return tile_obj;
+}
+
+export { TILE_TYPES, ALL_TILES, get_tile_type_obj, string_to_tile_type_obj, tile_to_image_key, tile_to_xml, xml_tile_to_tile_obj }

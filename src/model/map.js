@@ -1,4 +1,4 @@
-const STANDARD_SIZE = {width: 10, height: 10};
+const STANDARD_SIZE = {width: 12, height: 16};
 
 const TILE_TYPES = {
     OpenFloor: 0,
@@ -13,10 +13,28 @@ const TILE_TYPES = {
     RepairSite: 9,
 }
 
+const TILE_TYPE_STRING = [
+    "OpenFloor",
+    "Gear",
+    "NormalStraightConveyorBelt",
+    "ExpressStraightConveyorBelt",
+    "NormalTurnConveyorBelt",
+    "ExpressTurnConveyorBelt",
+    "Pit",
+    "Flag",
+    "Dock",
+    "RepairSite"
+]
+
 const PROP_TYPES = {
     Wall: 0,
     LaserBeam: 1,
 }
+
+const PROP_TYPE_STRING = [
+    "Wall",
+    "LaserBeam",
+]
 
 const directionToString = (direction) => {
     switch (direction) {
@@ -402,5 +420,74 @@ const create_new_tile = () => {
     }
 }
 
+const prop_to_xml = (prop, indent) => {
+    let xml_out = ``;
+    indent += `\t`;
+    switch (prop.position) {
+        case DIRECTIONS.UP: xml_out += `${indent}<up>\n`; break;
+        case DIRECTIONS.DOWN: xml_out += `${indent}<down>\n`; break;
+        case DIRECTIONS.LEFT: xml_out += `${indent}<left>\n`; break;
+        case DIRECTIONS.RIGHT: xml_out += `${indent}<right>\n`; break;
+        default: break;
+    }
 
-export {create_new_map, TILE_TYPES, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey}
+    indent += `\t`;
+    xml_out += `${indent}<propType>${PROP_TYPE_STRING[prop.prop_type]}</propType>\n`;
+    if (prop.variant) {
+        xml_out += `${indent}<variant>${prop.variant}</variant>\n`;
+    }
+    switch (prop.prop_type) {
+        case PROP_TYPES.LaserBeam: xml_out += `${indent}<activationPhases>ALL</activationPhases>\n`; break;
+        default: xml_out += `${indent}<activationPhases>NONE</activationPhases>\n`; break;
+    }
+    indent = indent.slice(0, indent.length-1);
+
+    switch (prop.position) {
+        case DIRECTIONS.UP: xml_out += `${indent}</up>\n`; break;
+        case DIRECTIONS.DOWN: xml_out += `${indent}</down>\n`; break;
+        case DIRECTIONS.LEFT: xml_out += `${indent}</left>\n`; break;
+        case DIRECTIONS.RIGHT: xml_out += `${indent}</right>\n`; break;
+        default: break;
+    }
+    return xml_out;
+}
+
+const map_to_xml = (map) => {
+    let indent = ``;
+    let xml_out = `<gameboard>\n`;
+    indent += `\t`;
+    for (let i = 0; i < map.tiles[0].length; i++) {
+        xml_out += `${indent}<row>\n`;
+        indent += `\t`
+        for (let j = 0; j < map.tiles.length; j++) {;
+            let tile = map.tiles[j][i];
+            xml_out += `${indent}<tile>\n`;
+            indent += `\t`;
+            xml_out += `${indent}<tileType>${TILE_TYPE_STRING[tile.tile_type]}</tileType>\n`;
+            if (tile.variant !== undefined) {
+                xml_out += `${indent}<variant>${tile.variant}</variant>\n`;
+            }
+            if (tile.direction !== undefined) {
+                xml_out += `${indent}<direction>${directionToString(tile.direction)}</direction>\n`;
+            }
+            if (tile.sourceDirection !== undefined) {
+                xml_out += `${indent}<sourceDirection>${directionToString(tile.sourceDirection)}</sourceDirection>\n`;
+            }
+            if (tile.props && Object.entries(tile.props).length > 0) {
+                xml_out += `${indent}<props>\n`
+                for (let prop in tile.props) {
+                    xml_out += prop_to_xml(tile.props[prop], indent);
+                }
+                xml_out += `${indent}</props>\n`
+            }
+            indent = indent.slice(0, indent.length-1);
+            xml_out += `${indent}</tile>\n`;
+        }
+        indent = indent.slice(0, indent.length-1);
+        xml_out += `${indent}</row>\n`;
+    }
+    xml_out += `</gameboard>`
+    return xml_out;
+}
+
+export {create_new_map, TILE_TYPES, tileTypeToImageKey, ALL_TILES, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey, map_to_xml}

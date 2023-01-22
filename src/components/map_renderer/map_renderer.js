@@ -1,9 +1,10 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {enumerate_map, is_position_in_map, TYPES, propTypeToImageKey} from "../../model/map";
+import {enumerate_map, is_position_in_map, TYPES} from "../../model/map";
 import { useSelector, useDispatch } from 'react-redux';
 import {generate_image_tags} from "../../model/images";
 import {setTile, setProp} from "../../store/mapSlice";
 import {tile_to_image_key} from "../../model/tiles";
+import {prop_to_image_key} from "../../model/props";
 
 function MapRenderer ({width, height}) {
 
@@ -27,7 +28,7 @@ function MapRenderer ({width, height}) {
             ctx.drawImage(images[tile_to_image_key(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
             if (tile.props) {
                 Object.entries(tile.props).forEach(([key, prop]) => {
-                    ctx.drawImage(images[propTypeToImageKey(prop)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+                    ctx.drawImage(images[prop_to_image_key(prop)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
                 })
             }
         })

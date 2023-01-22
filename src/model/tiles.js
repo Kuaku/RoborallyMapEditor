@@ -348,7 +348,6 @@ const TILE_TYPES_OBJS = [
 ]
 
 const tile_to_image_key = (tile) => {
-    console.log(tile, get_tile_type_obj(tile.tile_type));
     return get_tile_type_obj(tile.tile_type).get_image_key(tile);
 }
 
@@ -364,7 +363,7 @@ const get_tile_type_obj = (tile_type) => {
 const string_to_tile_type_obj = (tile_type_string) => {
     for (let i = 0; i < TILE_TYPES_OBJS.length; i++) {
         if (TILE_TYPES_OBJS[i].tile_type_string === tile_type_string) {
-            return TILE_TYPES_OBJS;
+            return TILE_TYPES_OBJS[i];
         }
     }
     return undefined;

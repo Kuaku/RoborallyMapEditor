@@ -1,15 +1,7 @@
 import {get_tile_type_obj, string_to_tile_type_obj, tile_to_image_key, TILE_TYPES} from "./tiles";
+import {get_prop_type_obj, prop_to_image_key, PROP_TYPES, string_to_prop_type_obj} from "./props";
 
 const STANDARD_SIZE = {width: 12, height: 16};
-
-const string_to_prop_type = (propType) => {
-    for (let i = 0; i < PROP_TYPE_STRING.length; i++) {
-        if (PROP_TYPE_STRING[i] === propType) {
-            return i;
-        }
-    }
-    return -1;
-}
 
 const xml_tile_to_tile_obj = (tile) => {
     const tile_type_obj = string_to_tile_type_obj(tile.getElementsByTagName("tileType")[0].innerHTML);
@@ -20,22 +12,16 @@ const xml_tile_to_tile_obj = (tile) => {
         tile_obj.props = {};
         for (let i = 0; i < props.children.length; i++) {
             const prop = props.children[i];
-            const prop_type = string_to_prop_type(prop.getElementsByTagName("propType")[0].innerHTML);
-            tile_obj.props[string_to_direction(prop.tagName)] = initPropType[prop_type](prop);
+            const prop_type_obj = string_to_prop_type_obj(prop.getElementsByTagName("propType")[0].innerHTML);
+            console.log(prop_type_obj);
+            tile_obj.props[string_to_direction(prop.tagName)] = prop_type_obj.from_xml_tile(prop);
         }
     }
     return tile_obj;
 }
 
-const PROP_TYPES = {
-    Wall: 0,
-    LaserBeam: 1,
-}
 
-const PROP_TYPE_STRING = [
-    "Wall",
-    "LaserBeam",
-]
+
 
 const directionToString = (direction) => {
     switch (direction) {
@@ -69,33 +55,7 @@ const enumerate_map = (map, cb) => {
     })
 }
 
-const getImageKeysProp = [
-    //Wall
-    (prop) => {
-        return `WALL_NONE_${directionToString(prop.position)}`;
-    },
-    //LaserBeam
-    (prop) => {
-        return `LASER_BEAM_${prop.variant}_ALL_${directionToString(prop.position)}`
-    }
-]
-const initPropType = [
-    //Wall
-    (prop) => {
-        return {
-            prop_type: PROP_TYPES.Wall,
-            position: string_to_direction(prop.tagName),
-        }
-    },
-    //LaserBeam
-    (prop) => {
-        return {
-            prop_type: PROP_TYPES.LaserBeam,
-            position: string_to_direction(prop.tagName),
-            variant: prop.getElementsByTagName("variant")[0].innerHTML,
-        }
-    }
-]
+
 
 const DIRECTIONS = {
     UP: 0,
@@ -103,65 +63,6 @@ const DIRECTIONS = {
     LEFT: 2,
     RIGHT: 3,
 }
-
-const ALL_PROPS = [
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.UP
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.LEFT
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.DOWN
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.RIGHT
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.UP,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.LEFT,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.DOWN,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.RIGHT,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.UP,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.LEFT,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.DOWN,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.RIGHT,
-        variant: "TWO"
-    }
-]
 
 const create_new_map = () => {
     const tiles = [];
@@ -177,12 +78,6 @@ const create_new_map = () => {
     }
 }
 
-
-
-const propTypeToImageKey = (prop) => {
-    return getImageKeysProp[prop.prop_type](prop);
-}
-
 const TYPES = {
     TILE: 0,
     PROP: 1,
@@ -191,7 +86,7 @@ const TYPES = {
 const selectionToImageKey = (selection_object) => {
     switch (selection_object.type) {
         case TYPES.TILE: return tile_to_image_key(selection_object.object);
-        case TYPES.PROP: return propTypeToImageKey(selection_object.object);
+        case TYPES.PROP: return prop_to_image_key(selection_object.object);
         default: return "";
     }
 }
@@ -214,7 +109,7 @@ const prop_to_xml = (prop, indent) => {
     }
 
     indent += `\t`;
-    xml_out += `${indent}<propType>${PROP_TYPE_STRING[prop.prop_type]}</propType>\n`;
+    xml_out += `${indent}<propType>${get_prop_type_obj(prop.prop_type).prop_type_string}</propType>\n`;
     if (prop.variant) {
         xml_out += `${indent}<variant>${prop.variant}</variant>\n`;
     }
@@ -286,4 +181,4 @@ const map_to_xml = (map) => {
     return xml_out;
 }
 
-export {create_new_map, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, ALL_PROPS, propTypeToImageKey, map_to_xml, xml_to_map}
+export {create_new_map, enumerate_map, is_position_in_map, selectionToImageKey, TYPES, map_to_xml, xml_to_map}

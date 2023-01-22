@@ -1,8 +1,10 @@
 import MapRenderer from "../map_renderer/map_renderer";
 import "./editor.css";
 import Selection from "../selection/selection";
-import {ALL_PROPS, ALL_TILES, TYPES} from "../../model/map";
 import Toolbar from "../toolbar/toolbar";
+import { ALL_TILES } from "../../model/tiles";
+import {ALL_PROPS} from "../../model/props";
+import {TYPES} from "../../model/selection";
 function Editor ({ map, changeTileRequest }) {
 
     return (<>

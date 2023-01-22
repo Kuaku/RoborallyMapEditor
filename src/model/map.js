@@ -1,315 +1,73 @@
-import XMLParser from 'react-xml-parser';
-import axios from 'axios';
+import {tile_to_xml, xml_tile_to_tile_obj, TILE_TYPES} from "./tiles";
+import {ExportXMLParser} from "./export_xml_parser";
+
 const STANDARD_SIZE = {width: 10, height: 10};
 
-const TILE_TYPES = {
-    OpenFloor: 0,
-    Gear: 1,
-    NormalStraightConveyorBelt: 2,
-    ExpressStraightConveyorBelt: 3,
-    NormalTurnConveyorBelt: 4,
-    ExpressTurnConveyorBelt: 5,
-    Pit: 6,
-    Flag: 7,
-    Dock: 8,
-    RepairSite: 9,
+const is_position_in_map = (map, position) => {
+    return position.row >= 0 && position.row < map.tiles.length && position.col >= 0 && position.col < map.tiles[0].length;
 }
 
-const directionToString = (direction) => {
-    switch (direction) {
-        case DIRECTIONS.UP: return  "UP";
-        case DIRECTIONS.DOWN: return  "DOWN";
-        case DIRECTIONS.LEFT: return  "LEFT";
-        case DIRECTIONS.RIGHT: return "RIGHT";
-        default: return "";
-    }
-}
-
-
-const getImageKeys = [
-    //OpenFloor
-    (_tile) => {
-        return "OPEN_FLOOR"
-    },
-    //Gear
-    (tile) => {
-        return `GEAR_${directionToString(tile.direction)}`;
-    },
-    //NormalStraightConveyorBelt
-    (tile) => {
-        return `CONV_BELT_NORMAL_${directionToString(tile.direction)}_STRAIGHT`;
-    },
-    //ExpressStraightConveyorBelt
-    (tile) => {
-        return `CONV_BELT_EXPRESS_${directionToString(tile.direction)}_STRAIGHT`;
-    },
-    //NormalTurnConveyorBelt
-    (tile) => {
-        return `CONV_BELT_NORMAL_${directionToString(tile.sourceDirection)}_TURN_${directionToString(tile.direction)}`;
-    },
-    //ExpressTurnConveyorBelt
-    (tile) => {
-        return `CONV_BELT_EXPRESS_${directionToString(tile.sourceDirection)}_TURN_${directionToString(tile.direction)}`;
-    },
-    //Pit
-    (_tile) => {
-        return "PIT";
-    },
-    //Flag
-    (tile) => {
-        return `FLAG_${tile.variant}`;
-    },
-    //Dock
-    (tile) => {
-        return `DOCK_${tile.variant}`;
-        },
-    //RepairSote
-    (tile) => {
-        return `REPAIR_SITE_${tile.variant}`;
-    },
-]
-
-const DIRECTIONS = {
-    UP: 0,
-    DOWN: 1,
-    LEFT: 2,
-    RIGHT: 3,
-}
-
-const ALL_TILES = [
-    {
-        tile_type: TILE_TYPES.OpenFloor
-    },
-    {
-        tile_type: TILE_TYPES.Pit
-    },
-    {
-        tile_type: TILE_TYPES.RepairSite,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.RepairSite,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "THREE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "FOUR"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "FIVE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "SIX"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "SEVEN"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "EIGHT"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "THREE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "FOUR"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "FIVE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "SIX"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "SEVEN"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "EIGHT"
-    },
-    {
-        tile_type: TILE_TYPES.Gear,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.Gear,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.LEFT
-    }
-];
-
-const getTileSet = () => {
-    return new Promise((resolve) => {
-        console.log("Initialise tileset");
-        axios.get("/RoborallyMapEditor/tiles.xml").then(xml_string => {
-            let xml = new XMLParser().parseFromString(xml_string.data);
-            let tiles = xml.getElementsByTagName("Tile");
-            let tileSet = {};
-            [...tiles].forEach(tile => {
-                let key = tile.attributes.key;
-                tileSet[key] = {
-                    position: {
-                        x: parseInt(tile.children[0].attributes.x),
-                        y: parseInt(tile.children[0].attributes.y)
-                    },
-                    size: {
-                        width: tile.children[1].attributes.x - tile.children[0].attributes.x,
-                        height: tile.children[1].attributes.y - tile.children[0].attributes.y,
-                    }
-                }
-            })
-
-            console.log(tileSet);
-            resolve(tileSet);
+const enumerate_map = (map, cb) => {
+    map.tiles.forEach((row_obj, row) => {
+        row_obj.forEach((tile, col) => {
+            cb(tile, col, row);
         })
     })
 }
 
+const change_height = (map, new_height) => {
+    console.log("CHANGE HEIGHT");
+    if (new_height < 1) {
+        new_height = 1;
+    }
+    if (map.tiles.length > new_height) {
+        map.tiles = map.tiles.slice(0, new_height);
+    } else if (map.tiles.length < new_height) {
+        console.log(map.tiles.length, new_height, map.tiles.length !== new_height)
+        while(map.tiles.length !== new_height) {
+            map.tiles.push(
+                create_row(map.tiles[0].length)
+            )
+        }
+    }
+
+    console.log("CHANGE HEIGHT FINISHED");
+    return map;
+}
+
+const change_width = (map, new_width) => {
+    if (new_width < 1) {
+        new_width = 1;
+    }
+    if (map.tiles[0].length > new_width) {
+        for (let i = 0; i < map.tiles.length; i++) {
+            map.tiles[i] = map.tiles[i].slice(0, new_width);
+        }
+    } else if (map.tiles[0].length < new_width) {
+        for (let i = 0; i < map.tiles.length; i++) {
+            while (map.tiles[i].length !== new_width) {
+                map.tiles[i].push({ tile_type: TILE_TYPES.OpenFloor });
+            }
+        }
+    }
+
+    return map;
+}
+
+const create_row = (length) => {
+    let row = [];
+    for (let j = 0; j < length; j++) {
+        row.push({ tile_type: TILE_TYPES.OpenFloor });
+    }
+    return row;
+}
+
 const create_new_map = () => {
     const tiles = [];
-    for (let i = 0; i < STANDARD_SIZE.width; i++) {
+    for (let i = 0; i < STANDARD_SIZE.height; i++) {
         tiles.push([]);
-        for (let j = 0; j < STANDARD_SIZE.height; j++) {
-            tiles[i].push(create_new_tile());
+        for (let j = 0; j < STANDARD_SIZE.width; j++) {
+            tiles[i].push({ tile_type: TILE_TYPES.OpenFloor });
         }
     }
 
@@ -318,15 +76,33 @@ const create_new_map = () => {
     }
 }
 
-const tileTypeToImageKey = (tile) => {
-    return getImageKeys[tile.tile_type](tile);
-}
-
-const create_new_tile = () => {
-    return {
-        tile_type: TILE_TYPES.OpenFloor
+const xml_to_map = (xml_string) => {
+    let xml = new DOMParser().parseFromString(xml_string, "text/xml");
+    const rows = xml.getElementsByTagName("row");
+    let map = {
+        tiles: [...rows].map((row_xml) => {
+            const row = row_xml.getElementsByTagName("tile");
+            return [...row].map((tile) => {
+                return xml_tile_to_tile_obj(tile);
+            })
+        })
     }
+    return map;
 }
 
+const map_to_xml = (map) => {
+    let parser = new ExportXMLParser();
+    parser.open_tag("gameboard");
+    for (let row = 0; row < map.tiles.length; row++) {
+        parser.open_tag("row");
+        for (let col = 0; col < map.tiles[row].length; col++) {;
+            let tile = map.tiles[row][col];
+            tile_to_xml(tile, parser);
+        }
+        parser.close_tag();
+    }
+    parser.close_tag();
+    return parser.get_text();
+}
 
-export {create_new_map, TILE_TYPES, getTileSet, tileTypeToImageKey, ALL_TILES}
+export {create_new_map, enumerate_map, is_position_in_map, map_to_xml, xml_to_map, change_height, change_width}

@@ -1,99 +1,85 @@
 import {useCallback, useEffect, useRef, useState} from "react";
-import {getTileSet, tileTypeToImageKey} from "../../model/map";
+import {enumerate_map, is_position_in_map} from "../../model/map";
+import { useSelector, useDispatch } from 'react-redux';
+import {generate_image_tags} from "../../model/images";
+import {setTile, setProp} from "../../store/mapSlice";
+import {tile_to_image_key} from "../../model/tiles";
+import {prop_to_image_key} from "../../model/props";
+import {TYPES} from "../../model/selection";
 
-function MapRenderer ({map, width, height, changeTileRequest}) {
+function MapRenderer ({width, height}) {
 
+    const image_src = useSelector((state) => state.images.value);
+    const map = useSelector((state) => state.map.value);
+    const dispatch = useDispatch();
 
     const canvasRef = useRef(null);
-    const [tileSet, setTileSet] = useState(undefined);
-    const [image, setImage] = useState(undefined);
-
-    const drawImage = useCallback((ctx, image, sourcePosition, sourceSize, destPosition, destSize) => {
-        console.log(sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
-        ctx.drawImage(image, sourcePosition.x, sourcePosition.y, sourceSize.width, sourceSize.height, destPosition.x, destPosition.y, destSize.width, destSize.height);
-        }, [])
-    
-    const drawTile = useCallback((ctx, tile, tilePosition, cellSize) => {
-        let image_key = tileTypeToImageKey(tile);
-        drawImage(ctx, image, tileSet[image_key].position, tileSet[image_key].size, tilePosition, cellSize);
-    }, [image, tileSet, drawImage])
+    const [images, setImages] = useState(undefined);
+    const [cellSize, setCellSize] = useState({x: 0, y: 0});
 
     const render = useCallback(() => {
-        console.log("RENDER", image, map);
-        if (canvasRef.current == null)
+        if (canvasRef.current == null || images == null)
             return;
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d');
-        const cellSize = {width: width/map.tiles.length, height: height/map.tiles[0].length};
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, width, height);
 
-        ctx.strokeStyle = "#000000";
-
-        map.tiles.forEach((row, i) => {
-            row.forEach((tile, j) => {
-                const tilePosition = {x: (i+1) * cellSize.width, y: (j+1) * cellSize.height}
-                drawTile(ctx, tile, tilePosition, cellSize);
-
-                strokeRect(ctx, tilePosition, cellSize);
-            })
+        enumerate_map(map, (tile, col, row) => {
+            const tilePosition = {x: (col+1) * cellSize.width, y: (row+1) * cellSize.height};
+            ctx.drawImage(images[tile_to_image_key({tile_type: 0})], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+            ctx.drawImage(images[tile_to_image_key(tile)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+            if (tile.props) {
+                Object.entries(tile.props).forEach(([key, prop]) => {
+                    ctx.drawImage(images[prop_to_image_key(prop)], tilePosition.x, tilePosition.y, cellSize.width, cellSize.height);
+                })
+            }
         })
-    }, [drawTile, height, width, map, image]);
-
-
-
-
-    const strokeRect = (ctx, position, size) => {
-        ctx.strokeRect(position.x, position.y, size.width, size.height);
-    }
-
-
+    }, [map, images, cellSize, width, height]);
 
     useEffect(() => {
-        render();
-        }, [image, render])
-
+        setCellSize({width: width/(map.tiles[0].length+1), height: height/(map.tiles.length+1)});
+    }, [map, width, height])
 
     useEffect(() => {
+        console.log("RENDER");
         render();
-        }, [tileSet, render])
+    }, [map, images, render])
 
-    const loadTileSet = async () => {
-        const tileSet = await getTileSet();
-        setTileSet(tileSet);
-    }
-
-    const loadImage = async () => {
-        let image = new Image();
-        console.log("IMAGE:", image);
-        image.onload = () => {
-            console.log("IMAGE:", image);
-            setImage(image);
-        };
-        image.src = "/RoborallyMapEditor/tiles_tileset.png";
-    }
+    useEffect(() => {
+        setImages(generate_image_tags(image_src));
+    }, [image_src])
 
     const allowDrop = (ev) => {
         ev.preventDefault();
     }
 
-    const drop = (ev) => {
-        ev.preventDefault();
-        const cellSize = {width: width/map.tiles.length, height: height/map.tiles[0].length};
-        const canvasSize = canvasRef.current.getBoundingClientRect();
-        const position = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
-        const tilePosition = {x: parseInt((position.x-cellSize.width)/cellSize.width), y: parseInt((position.y-cellSize.height)/cellSize.height)};
-        const tile = JSON.parse(ev.dataTransfer.getData("text"));
-        if (tilePosition.x >= 0 && tilePosition.x < map.tiles.length && tilePosition.y >= 0 && tilePosition.y < map.tiles[0].length) {
-            changeTileRequest(tilePosition, tile);
+    const drop_tile = (tile, tilePosition) => {
+        if (is_position_in_map(map, tilePosition)) {
+            dispatch(setTile({position: tilePosition, tile}));
         }
-        //console.log(JSON.parse(ev.dataTransfer.getData("text")));
     }
 
-    useEffect(() => {
-        loadTileSet();
-        loadImage();
-        }, [])
+    const drop_prop = (prop, propPosition) => {
+        if (is_position_in_map(map, propPosition)) {
+            dispatch(setProp({position: propPosition, prop}));
+        }
+    }
 
-    if (!tileSet || !image)
+    const drop = (ev) => {
+        ev.preventDefault();
+        const selection_object = JSON.parse(ev.dataTransfer.getData("text"));
+        const canvasSize = canvasRef.current.getBoundingClientRect();
+        const mousePosition = {x: ev.clientX - canvasSize.left, y: ev.clientY - canvasSize.top};
+        const tilePosition = {col: Math.floor((mousePosition.x-cellSize.width)/cellSize.width), row: Math.floor((mousePosition.y-cellSize.height)/cellSize.height)};
+        switch (selection_object.type) {
+            case TYPES.TILE: drop_tile(selection_object.object, tilePosition); break;
+            case TYPES.PROP: drop_prop(selection_object.object, tilePosition); break;
+            default: break;
+        }
+    }
+
+    if (!images)
         return (<></>);
 
     return (<>

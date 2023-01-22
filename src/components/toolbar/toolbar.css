@@ -1,0 +1,23 @@
+.toolbar {
+    margin: 0 15px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.toolbar span {
+    margin: auto 2px auto 15px;
+}
+
+.toolbar input::-webkit-outer-spin-button,
+.toolbar input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.toolbar input[type=number] {
+    -moz-appearance: textfield;
+    width: 50px;
+}

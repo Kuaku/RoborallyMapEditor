@@ -5,7 +5,7 @@ import Toolbar from "../toolbar/toolbar";
 import { ALL_TILES } from "../../model/tiles";
 import {ALL_PROPS} from "../../model/props";
 import {TYPES} from "../../model/selection";
-function Editor ({ map, changeTileRequest }) {
+function Editor ({ changeTileRequest }) {
 
     return (<>
     <div className={"editor"}>
@@ -13,7 +13,7 @@ function Editor ({ map, changeTileRequest }) {
             <Toolbar />
         </div>
         <div className={"editor-map-area"}>
-            <MapRenderer map={map} width={1000} height={1000} changeTileRequest={changeTileRequest}/>
+            <MapRenderer changeTileRequest={changeTileRequest}/>
         </div>
         <div className={"editor-tile-selection-area"}>
             <Selection type={TYPES.TILE} objects={ALL_TILES}/>

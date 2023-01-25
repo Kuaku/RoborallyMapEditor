@@ -17,3 +17,12 @@
 .selection-group-items.display-false {
     display: none;
 }
+
+.selection-group .selection-group-header > * {
+    color: #000000;
+    font-weight: bold;
+}
+
+.selection-group .selection-group-header > *:first-child {
+    margin-right: 5px;
+}

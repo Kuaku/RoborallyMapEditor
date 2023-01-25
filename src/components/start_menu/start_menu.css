@@ -1,13 +1,89 @@
 .start_menu_container {
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
-    max-width: 400px;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: space-around;
     align-items: center;
     margin: auto;
 }
 
-.start_menu_container button,
-.start_menu_container input{
-    width: 90%;
+.start_menu_container .file_upload-container,
+.start_menu_container .create_new_contianer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to bottom, #FFFFFF 50%, #2590EB 50%);
+    background-size: 100% 200%;
+    transition: all 0.5s;
+    pointer-events: none;
+}
+
+.start_menu_container .file_upload-container:hover,
+.start_menu_container .create_new_contianer:hover {
+    background-position: 0 -100%;
+}
+
+.start_menu_container button {
+    border:4px solid #2590EB;
+    border-radius: 100px;
+    background-image: linear-gradient(to bottom, #2590EB 50%, #FFFFFF 50%);
+    background-size: 100% 200%;
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+    transition: all 0.08s ease 0.12s;
+    pointer-events: auto;
+    padding: 5px;
+}
+
+.start_menu_container button:hover {
+    cursor: pointer;
+
+    background-position: 0 -100%;
+
+    color:#2590EB;
+
+}
+
+.start_menu_container .file_upload {
+    pointer-events: auto;
+    height:100px;
+    width:100px;
+    border-radius: 100px;
+    position:relative;
+
+    display:flex;
+    justify-content:center;
+    align-items: center;
+
+    border:4px solid #2590EB;
+    overflow:hidden;
+    background-image: linear-gradient(to bottom, #2590EB 50%, #FFFFFF 50%);
+    background-size: 100% 200%;
+    transition: all 0.08s ease 0.12s;
+    color: #FFFFFF;
+    font-size:100px;
+}
+
+.start_menu_container .file_upload i {
+    font-size: 70px;
+}
+
+.start_menu_container .file_upload input[type='file'] {
+    height:200px;
+    width:200px;
+    position:absolute;
+    top:0;
+    left:0;
+    opacity:0;
+    cursor:pointer;
+}
+
+.start_menu_container .file_upload:hover {
+    background-position: 0 -100%;
+
+    color:#2590EB;
 }

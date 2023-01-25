@@ -16,22 +16,18 @@ const enumerate_map = (map, cb) => {
 }
 
 const change_height = (map, new_height) => {
-    console.log("CHANGE HEIGHT");
     if (new_height < 1) {
         new_height = 1;
     }
     if (map.tiles.length > new_height) {
         map.tiles = map.tiles.slice(0, new_height);
     } else if (map.tiles.length < new_height) {
-        console.log(map.tiles.length, new_height, map.tiles.length !== new_height)
         while(map.tiles.length !== new_height) {
             map.tiles.push(
                 create_row(map.tiles[0].length)
             )
         }
     }
-
-    console.log("CHANGE HEIGHT FINISHED");
     return map;
 }
 

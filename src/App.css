@@ -27,16 +27,6 @@ body {
   grid-template-rows: 80px 1fr;
 }
 
-
-button,
-input{
-    background: transparent;
-    padding: 10px;
-    border: 1px solid black;
-    border-radius: 20px;
-    text-align-last: center;
-}
-
 button:hover {
     cursor: pointer;
 }

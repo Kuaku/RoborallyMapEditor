@@ -36,6 +36,7 @@
     font-size: 25px;
     transition: all 0.08s ease 0.12s;
     pointer-events: auto;
+    padding: 5px;
 }
 
 .start_menu_container button:hover {

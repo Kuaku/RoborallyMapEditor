@@ -8,11 +8,27 @@
 }
 
 .toolbar span {
+    font-weight: bold;
     margin: auto 2px auto 15px;
 }
-
-.toolbar button {
+.toolbar button,
+.toolbar input {
     font-size: 15px;
+    border:4px solid #2590EB;
+    border-radius: 100px;
+    background-color: #2590EB;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    transition: all 0.08s ease 0.12s;
+    pointer-events: auto;
+}
+
+.toolbar input {
+    background-color: white;
+    color: #2590EB;
+    text-align: center;
+    outline-color: #6fb9f7;
 }
 
 .toolbar input::-webkit-outer-spin-button,

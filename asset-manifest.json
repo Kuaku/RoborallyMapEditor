@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/RoborallyMapEditor/static/css/main.1eaeb3ee.css",
+    "main.css": "/RoborallyMapEditor/static/css/main.e856f622.css",
     "main.js": "/RoborallyMapEditor/static/js/main.200c12a7.js",
     "static/js/787.0a890a6b.chunk.js": "/RoborallyMapEditor/static/js/787.0a890a6b.chunk.js",
     "index.html": "/RoborallyMapEditor/index.html",
-    "main.1eaeb3ee.css.map": "/RoborallyMapEditor/static/css/main.1eaeb3ee.css.map",
+    "main.e856f622.css.map": "/RoborallyMapEditor/static/css/main.e856f622.css.map",
     "main.200c12a7.js.map": "/RoborallyMapEditor/static/js/main.200c12a7.js.map",
     "787.0a890a6b.chunk.js.map": "/RoborallyMapEditor/static/js/787.0a890a6b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1eaeb3ee.css",
+    "static/css/main.e856f622.css",
     "static/js/main.200c12a7.js"
   ]
 }

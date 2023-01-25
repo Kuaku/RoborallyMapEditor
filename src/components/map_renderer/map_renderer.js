@@ -13,7 +13,7 @@ import "./map_renderer.css";
 function MapRenderer () {
 
     const image_src = useSelector((state) => state.images.value);
-    const map = useSelector((state) => state.map.value);
+    const map = useSelector((state) => state.map.present.value);
     const dispatch = useDispatch();
 
     const pref_cell_size = 64;

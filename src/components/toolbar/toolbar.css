@@ -11,6 +11,10 @@
     margin: auto 2px auto 15px;
 }
 
+.toolbar button {
+    font-size: 15px;
+}
+
 .toolbar input::-webkit-outer-spin-button,
 .toolbar input::-webkit-inner-spin-button {
     -webkit-appearance: none;

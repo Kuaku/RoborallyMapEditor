@@ -2,9 +2,9 @@ import MapRenderer from "../map_renderer/map_renderer";
 import "./editor.css";
 import Selection from "../selection/selection";
 import Toolbar from "../toolbar/toolbar";
-import { ALL_TILES } from "../../model/tiles";
-import {ALL_PROPS} from "../../model/props";
-import {TYPES} from "../../model/selection";
+import {TILES_SELECTION_GROUP} from "../../model/tiles";
+import {PROPS_SELECTION_GROUP} from "../../model/props";
+import {SELECTION_OBJECT_TYPES} from "../../model/selection";
 function Editor ({ changeTileRequest }) {
 
     return (<>
@@ -16,10 +16,10 @@ function Editor ({ changeTileRequest }) {
             <MapRenderer changeTileRequest={changeTileRequest}/>
         </div>
         <div className={"editor-tile-selection-area"}>
-            <Selection type={TYPES.TILE} objects={ALL_TILES}/>
+            <Selection type={SELECTION_OBJECT_TYPES.TILE} objects={TILES_SELECTION_GROUP}/>
         </div>
         <div className={"editor-prop-selection-area"}>
-            <Selection type={TYPES.PROP} objects={ALL_PROPS}/>
+            <Selection type={SELECTION_OBJECT_TYPES.PROP} objects={PROPS_SELECTION_GROUP}/>
         </div>
     </div>
     </>)

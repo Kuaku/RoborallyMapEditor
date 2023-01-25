@@ -1,0 +1,19 @@
+.selection-group {
+    width: 100%;
+    grid-column: 1 / 3;
+}
+.selection-group-items {
+    display: grid;
+    margin: 0 15px;
+    grid-template-columns: 1fr 1fr;
+}
+
+.selection-group-header {
+    display: flex;
+    text-align: center;
+    cursor: pointer;
+}
+
+.selection-group-items.display-false {
+    display: none;
+}

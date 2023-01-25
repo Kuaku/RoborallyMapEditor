@@ -1,7 +1,7 @@
 .editor {
     max-height: 100%;
     display: grid;
-    grid-template-columns: 80vw 10vw 10vw;
+    grid-template-columns: 70vw 15vw 15vw;
     grid-template-rows: 10% 90%;
     grid-column-gap: 0px;
     grid-row-gap: 0px;

@@ -5,7 +5,7 @@ import {generate_image_tags} from "../../model/images";
 import {setTile, setProp} from "../../store/mapSlice";
 import {tile_to_image_key} from "../../model/tiles";
 import {prop_to_image_key} from "../../model/props";
-import {TYPES} from "../../model/selection";
+import {SELECTION_OBJECT_TYPES} from "../../model/selection";
 import {TransformComponent, TransformWrapper} from "react-zoom-pan-pinch";
 
 import "./map_renderer.css";
@@ -115,8 +115,8 @@ function MapRenderer () {
         const zoom_state = transformComponentRef.current.state;
         const tilePosition = {col: Math.floor((mousePosition.x-(cellSize)*zoom_state.scale)/(cellSize*zoom_state.scale)), row: Math.floor((mousePosition.y-(cellSize)*zoom_state.scale)/(cellSize*zoom_state.scale))};
         switch (selection_object.type) {
-            case TYPES.TILE: drop_tile(selection_object.object, tilePosition); break;
-            case TYPES.PROP: drop_prop(selection_object.object, tilePosition); break;
+            case SELECTION_OBJECT_TYPES.TILE: drop_tile(selection_object.object, tilePosition); break;
+            case SELECTION_OBJECT_TYPES.PROP: drop_prop(selection_object.object, tilePosition); break;
             default: break;
         }
     }

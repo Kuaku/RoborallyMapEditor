@@ -1,13 +1,32 @@
 .editor {
-    height: 100%;
+
+    max-height: calc(100vh - 80px);
+
+    position: relative;
+    bottom: 0;
+    right: 0;
+    left: 0;
     display: grid;
-    grid-template-columns: 1fr 400px 400px;
-    grid-template-rows: 10% 90%;
-    grid-column-gap: 0px;
-    grid-row-gap: 0px;
+    grid-template-columns: calc(100vw - 480px) 240px 240px;
+    grid-template-rows: 80px calc(100vh - 160px);
+    grid-column-gap: 0;
+    grid-row-gap: 0;
 }
 
-.editor-toolbar-area { grid-area: 1 / 1 / 2 / 4; }
+.editor > * {
+    border: 4px solid #2590EB;
+    border-radius: 25px;
+    border-collapse: collapse;
+    margin: 5px;
+    padding: 10px;
+}
+
+.editor-toolbar-area { grid-area: 1 / 1 / 2 / 4;}
 .editor-tile-selection-area { grid-area: 2 / 2 / 3 / 3; }
 .editor-prop-selection-area { grid-area: 2 / 3 / 3 / 4; }
-.editor-map-area { grid-area: 2 / 1 / 3 / 2; }
+.editor-map-area {
+    grid-area: 2 / 1 / 3 / 2;
+    border: 0;
+    -webkit-box-shadow: 5px 5px 12px -5px #000000;
+    box-shadow: 3px 3px 14px 1px rgba(0, 0, 0, 0.2);
+}

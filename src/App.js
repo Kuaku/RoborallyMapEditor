@@ -10,7 +10,7 @@ import load_images from "./model/images";
 import {setImages} from "./store/imageSlice";
 
 function App() {
-    const map = useSelector((state) => state.map.value);
+    const map = useSelector((state) => state.map.present.value);
     const images = useSelector((state) => state.images.value);
     const dispatch = useDispatch();
 

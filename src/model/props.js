@@ -1,68 +1,80 @@
 import {direction_to_string, DIRECTIONS, string_to_direction} from "./directions";
+import {create_selection_group, create_selection_object} from "./selection";
 
 const PROP_TYPES = {
     Wall: 0,
     LaserBeam: 1,
 }
 
-const ALL_PROPS = [
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.UP
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.LEFT
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.DOWN
-    },
-    {
-        prop_type: PROP_TYPES.Wall,
-        position: DIRECTIONS.RIGHT
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.UP,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.LEFT,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.DOWN,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.RIGHT,
-        variant: "ONE"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.UP,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.LEFT,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.DOWN,
-        variant: "TWO"
-    },
-    {
-        prop_type: PROP_TYPES.LaserBeam,
-        position: DIRECTIONS.RIGHT,
-        variant: "TWO"
-    }
-]
+const PROPS_SELECTION_GROUP = create_selection_group(
+        "All Props",
+         create_selection_group(
+                 "Walls",
+                 create_selection_object({
+                     prop_type: PROP_TYPES.Wall,
+                     position: DIRECTIONS.UP
+                 }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.Wall,
+                    position: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.Wall,
+                    position: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.Wall,
+                    position: DIRECTIONS.RIGHT
+                }),
+         ),
+        create_selection_group(
+                "One Laser",
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.UP,
+                    variant: "ONE"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.LEFT,
+                    variant: "ONE"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.DOWN,
+                    variant: "ONE"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.RIGHT,
+                    variant: "ONE"
+                }),
+        ),
+        create_selection_group(
+                "Two Lasers",
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.UP,
+                    variant: "TWO"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.LEFT,
+                    variant: "TWO"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.DOWN,
+                    variant: "TWO"
+                }),
+                create_selection_object({
+                    prop_type: PROP_TYPES.LaserBeam,
+                    position: DIRECTIONS.RIGHT,
+                    variant: "TWO"
+                })
+        ),
+)
+
 const PROP_TYPES_OBJS = [
     {
         prop_type: PROP_TYPES.Wall,
@@ -139,4 +151,4 @@ const xml_prop_to_prop_obj = (prop) => {
     return prop_type_obj.from_xml_tile(prop);
 }
 
-export { PROP_TYPES, ALL_PROPS, get_prop_type_obj, string_to_prop_type_obj, prop_to_image_key, prop_to_xml, xml_prop_to_prop_obj }
+export { PROP_TYPES, PROPS_SELECTION_GROUP, get_prop_type_obj, string_to_prop_type_obj, prop_to_image_key, prop_to_xml, xml_prop_to_prop_obj }

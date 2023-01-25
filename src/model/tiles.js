@@ -1,5 +1,6 @@
 import {direction_to_string, DIRECTIONS, string_to_direction} from "./directions";
 import {prop_to_xml, xml_prop_to_prop_obj} from "./props";
+import {create_selection_group, create_selection_object} from "./selection";
 
 const TILE_TYPES = {
     OpenFloor: 0,
@@ -14,206 +15,231 @@ const TILE_TYPES = {
     RepairSite: 9,
 }
 
-const ALL_TILES = [
-    {
-        tile_type: TILE_TYPES.OpenFloor
-    },
-    {
-        tile_type: TILE_TYPES.Pit
-    },
-    {
-        tile_type: TILE_TYPES.RepairSite,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.RepairSite,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "THREE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "FOUR"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "FIVE"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "SIX"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "SEVEN"
-    },
-    {
-        tile_type: TILE_TYPES.Flag,
-        variant: "EIGHT"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "ONE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "TWO"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "THREE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "FOUR"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "FIVE"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "SIX"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "SEVEN"
-    },
-    {
-        tile_type: TILE_TYPES.Dock,
-        variant: "EIGHT"
-    },
-    {
-        tile_type: TILE_TYPES.Gear,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.Gear,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalStraightConveyorBelt,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
-        direction: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.NormalTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.DOWN
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.RIGHT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.LEFT,
-        sourceDirection: DIRECTIONS.UP
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.DOWN,
-        sourceDirection: DIRECTIONS.LEFT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.RIGHT
-    },
-    {
-        tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
-        direction: DIRECTIONS.UP,
-        sourceDirection: DIRECTIONS.LEFT
-    }
-];
+const TILES_SELECTION_GROUP = create_selection_group(
+        "All Tiles",
+        create_selection_object({
+            tile_type: TILE_TYPES.OpenFloor
+        }),
+        create_selection_object({
+            tile_type: TILE_TYPES.Pit
+        }),
+        create_selection_group(
+                "Repair Site",
+                create_selection_object({
+                    tile_type: TILE_TYPES.RepairSite,
+                    variant: "ONE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.RepairSite,
+                    variant: "TWO"
+                }),
+        ),
+        create_selection_group(
+                "Flags",
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "ONE"
+                                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "TWO"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "THREE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "FOUR"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "FIVE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "SIX"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "SEVEN"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Flag,
+                    variant: "EIGHT"
+                })
+        ),
+        create_selection_group(
+                "Docks",
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "ONE"
+                                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "TWO"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "THREE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "FOUR"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "FIVE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "SIX"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "SEVEN"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Dock,
+                    variant: "EIGHT"
+                })
+        ),
+        create_selection_group(
+                "Gear",
+                create_selection_object({
+                    tile_type: TILE_TYPES.Gear,
+                    direction: DIRECTIONS.RIGHT
+                }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.Gear,
+                   direction: DIRECTIONS.LEFT
+               }),
+       ),
+        create_selection_group(
+                "Normal Straight",
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+                    direction: DIRECTIONS.UP
+                }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+                   direction: DIRECTIONS.DOWN
+               }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+                   direction: DIRECTIONS.LEFT
+               }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.NormalStraightConveyorBelt,
+                   direction: DIRECTIONS.RIGHT
+               })
+       ),
+        create_selection_group(
+                "Express Straight",
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+                    direction: DIRECTIONS.UP
+                }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+                   direction: DIRECTIONS.DOWN
+               }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+                   direction: DIRECTIONS.LEFT
+               }),
+               create_selection_object({
+                   tile_type: TILE_TYPES.ExpressStraightConveyorBelt,
+                   direction: DIRECTIONS.RIGHT
+               })
+       ),
+        create_selection_group(
+                "Normal Turn",
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalTurnConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+        ),
+        create_selection_group(
+                "Express Turn",
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressTurnConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+        )
+);
 
 const TILE_TYPES_OBJS = [
     {
@@ -408,4 +434,4 @@ const xml_tile_to_tile_obj = (tile) => {
     return tile_obj;
 }
 
-export { TILE_TYPES, ALL_TILES, get_tile_type_obj, string_to_tile_type_obj, tile_to_image_key, tile_to_xml, xml_tile_to_tile_obj }
+export { TILE_TYPES, get_tile_type_obj, string_to_tile_type_obj, tile_to_image_key, tile_to_xml, xml_tile_to_tile_obj, TILES_SELECTION_GROUP }

@@ -376,4 +376,24 @@
         <position x="900" y="4800"/>
         <position x="1200" y="5100"/>
     </Tile>
+    <Tile key="PORTAL_BLACK">
+        <position x="1200" y="4500" />
+        <position x="1500" y="4800" />
+    </Tile>
+    <Tile key="PORTAL_BLUE">
+        <position x="1500" y="4500" />
+        <position x="1800" y="4800" />
+    </Tile>
+    <Tile key="PORTAL_ORANGE">
+        <position x="1200" y="4800" />
+        <position x="1500" y="5100" />
+    </Tile>
+    <Tile key="PORTAL_RED">
+        <position x="1500" y="4800" />
+        <position x="1800" y="5100" />
+    </Tile>
+    <Tile key="JUMPER">
+        <position x="2100" y="3000"/>
+        <position x="2400" y="3300"/>
+    </Tile>
 </TileSet>

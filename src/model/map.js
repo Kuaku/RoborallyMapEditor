@@ -68,14 +68,41 @@ const create_new_map = () => {
     }
 
     return {
+        portal_dict: {
+            "BLUE": [],
+            "RED": [],
+            "BLACK": [],
+        },
         tiles,
     }
+}
+
+const add_portal_to_map_dict = (position, tile, map) => {
+    map.portal_dict[tile.variant].push(position);
+    return map;
+}
+
+const add_portal_to_map = (position, tile, map) => {
+    if (map.portal_dict[tile.variant].length >= 2) {
+       let remove_position = map.portal_dict[tile.variant].shift();
+       map.tiles[remove_position.row][remove_position.col] = {
+           tile_type: TILE_TYPES.OpenFloor,
+       }
+    }
+    map.tiles[position.row][position.col] = tile;
+    map = add_portal_to_map_dict(position, tile, map);
+    return map;
 }
 
 const xml_to_map = (xml_string) => {
     let xml = new DOMParser().parseFromString(xml_string, "text/xml");
     const rows = xml.getElementsByTagName("row");
     let map = {
+        portal_dict: {
+            "BLUE": [],
+            "RED": [],
+            "BLACK": [],
+        },
         tiles: [...rows].map((row_xml) => {
             const row = row_xml.getElementsByTagName("tile");
             return [...row].map((tile) => {
@@ -91,9 +118,9 @@ const map_to_xml = (map) => {
     parser.open_tag("gameboard");
     for (let row = 0; row < map.tiles.length; row++) {
         parser.open_tag("row");
-        for (let col = 0; col < map.tiles[row].length; col++) {;
+        for (let col = 0; col < map.tiles[row].length; col++) {
             let tile = map.tiles[row][col];
-            tile_to_xml(tile, parser);
+            tile_to_xml(tile, parser, map, {row, col});
         }
         parser.close_tag();
     }
@@ -101,4 +128,4 @@ const map_to_xml = (map) => {
     return parser.get_text();
 }
 
-export {create_new_map, enumerate_map, is_position_in_map, map_to_xml, xml_to_map, change_height, change_width}
+export {create_new_map, enumerate_map, is_position_in_map, map_to_xml, xml_to_map, change_height, change_width, add_portal_to_map}

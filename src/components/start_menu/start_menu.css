@@ -48,7 +48,7 @@
 
 }
 
-.start_menu_container .file_upload {
+.start_menu_container .start_menu_input_container {
     pointer-events: auto;
     height:100px;
     width:100px;
@@ -68,11 +68,11 @@
     font-size:100px;
 }
 
-.start_menu_container .file_upload i {
+.start_menu_container .start_menu_input_container i {
     font-size: 70px;
 }
 
-.start_menu_container .file_upload input[type='file'] {
+.start_menu_container .start_menu_input_container input {
     height:200px;
     width:200px;
     position:absolute;
@@ -82,7 +82,7 @@
     cursor:pointer;
 }
 
-.start_menu_container .file_upload:hover {
+.start_menu_container .start_menu_input_container:hover {
     background-position: 0 -100%;
 
     color:#2590EB;

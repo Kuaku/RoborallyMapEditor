@@ -21,7 +21,7 @@ function StartMenu ({create_new_map_cb, open_map_cb}) {
         </div>
         <div className={"create_new_contianer"}>
             <div className="start_menu_input_container">
-                <input type="button" onClick={create_new_map_cb}/>
+              <input type="button" onClick={create_new_map_cb}/>
                 <i className="fa-solid fa-plus"></i>
             </div>
         </div>

@@ -14,6 +14,10 @@ const TILE_TYPES = {
     Dock: 8,
     RepairSite: 9,
     Jumper: 10,
+    NormalMergeConveyorBelt: 11,
+    ExpressMergeConveyorBelt: 12,
+    NormalJoinConveyorBelt: 13,
+    ExpressJoinConveyorBelt: 14,
 }
 
 const TILES_SELECTION_GROUP = create_selection_group(
@@ -29,7 +33,7 @@ const TILES_SELECTION_GROUP = create_selection_group(
                 create_selection_object({
                     tile_type: TILE_TYPES.Jumper
                 }),
-            ),
+        ),
         create_selection_group(
                 "Repair Site",
                 create_selection_object({
@@ -245,7 +249,131 @@ const TILES_SELECTION_GROUP = create_selection_group(
                     direction: DIRECTIONS.UP,
                     sourceDirection: DIRECTIONS.LEFT
                 }),
-        )
+            ),
+            create_selection_group(
+                "Normal Merge",
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                })
+                ),
+            create_selection_group(
+                "Express Merge",
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                })
+            ),
+        create_selection_group(
+                "Normal Join",
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.DOWN
+                })
+                ),
+        create_selection_group(
+                "Express Join",
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.UP,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.LEFT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.DOWN,
+                    sourceDirection: DIRECTIONS.RIGHT
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.LEFT,
+                    sourceDirection: DIRECTIONS.DOWN
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.UP
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                    direction: DIRECTIONS.RIGHT,
+                    sourceDirection: DIRECTIONS.DOWN
+                })
+                )
 );
 
 const TILE_TYPES_OBJS = [
@@ -311,7 +439,7 @@ const TILE_TYPES_OBJS = [
             };
         },
         get_image_key: (tile) => {
-            return `CONV_BELT_NORMAL_${direction_to_string(tile.sourceDirection)}_TURN_${direction_to_string(tile.direction)}`;
+            return `CONV_BELT_NORMAL_${direction_to_string(tile.direction)}_TURN_${direction_to_string(tile.sourceDirection)}`;
         },
     },
     {
@@ -325,7 +453,7 @@ const TILE_TYPES_OBJS = [
             };
         },
         get_image_key: (tile) => {
-            return `CONV_BELT_EXPRESS_${direction_to_string(tile.sourceDirection)}_TURN_${direction_to_string(tile.direction)}`;
+            return `CONV_BELT_EXPRESS_${direction_to_string(tile.direction)}_TURN_${direction_to_string(tile.sourceDirection)}`;
         },
     },
     {
@@ -391,6 +519,60 @@ const TILE_TYPES_OBJS = [
         get_image_key: (_tile) => {
             return "JUMPER"
         },
+    },
+    {
+        tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+        tile_type_string: "NormalMergeConveyorBelt",
+        from_xml_tile: (tile) => {
+            return {
+                tile_type: TILE_TYPES.NormalMergeConveyorBelt,
+                direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML)
+            };
+            },
+        get_image_key: (tile) => {
+            return `CONV_BELT_NORMAL_${direction_to_string(tile.direction)}_MERGE`;
+        },
+    },
+    {
+        tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+        tile_type_string: "ExpressMergeConveyorBelt",
+        from_xml_tile: (tile) => {
+            return {
+                tile_type: TILE_TYPES.ExpressMergeConveyorBelt,
+                direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML)
+            };
+            },
+        get_image_key: (tile) => {
+            return `CONV_BELT_EXPRESS_${direction_to_string(tile.direction)}_MERGE`;
+            },
+    },
+    {
+        tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+        tile_type_string: "NormalJoinConveyorBelt",
+        from_xml_tile: (tile) => {
+            return {
+                tile_type: TILE_TYPES.NormalJoinConveyorBelt,
+                direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML),
+                sourceDirection: string_to_direction(tile.getElementsByTagName("sourceDirection")[0].innerHTML)
+            };
+            },
+        get_image_key: (tile) => {
+            return `CONV_BELT_NORMAL_${direction_to_string(tile.direction)}_JOIN_${direction_to_string(tile.sourceDirection)}`;
+            },
+    },
+    {
+        tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+        tile_type_string: "ExpressJoinConveyorBelt",
+        from_xml_tile: (tile) => {
+            return {
+                tile_type: TILE_TYPES.ExpressJoinConveyorBelt,
+                direction: string_to_direction(tile.getElementsByTagName("direction")[0].innerHTML),
+                sourceDirection: string_to_direction(tile.getElementsByTagName("sourceDirection")[0].innerHTML)
+            };
+            },
+        get_image_key: (tile) => {
+            return `CONV_BELT_EXPRESS_${direction_to_string(tile.direction)}_JOIN_${direction_to_string(tile.sourceDirection)}`;
+            },
     },
 ]
 

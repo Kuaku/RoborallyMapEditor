@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {change_height, change_width} from "../model/map";
+import {add_portal_to_map, change_height, change_width} from "../model/map";
+import {TILE_TYPES} from "../model/tiles";
 
 const initialState = {
     value: undefined,
@@ -14,6 +15,10 @@ export const mapSlice = createSlice({
         },
         setTile: (state, action) => {
             const payload = action.payload;
+            if (payload.tile.tile_type === TILE_TYPES.Portal) {
+                state.value = add_portal_to_map(payload.position, payload.tile, state.value);
+                return;
+            }
             state.value.tiles[payload.position.row][payload.position.col] = payload.tile;
         },
         setProp: (state, action) => {

@@ -18,6 +18,7 @@ const TILE_TYPES = {
     ExpressMergeConveyorBelt: 12,
     NormalJoinConveyorBelt: 13,
     ExpressJoinConveyorBelt: 14,
+    Portal: 15,
 }
 
 const TILES_SELECTION_GROUP = create_selection_group(
@@ -28,6 +29,21 @@ const TILES_SELECTION_GROUP = create_selection_group(
         create_selection_object({
             tile_type: TILE_TYPES.Pit
         }),
+        create_selection_group(
+                "Portal",
+                create_selection_object({
+                    tile_type: TILE_TYPES.Portal,
+                    variant: "RED"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Portal,
+                    variant: "BLUE"
+                }),
+                create_selection_object({
+                    tile_type: TILE_TYPES.Portal,
+                    variant: "BLACK"
+                }),
+        ),
         create_selection_group(
                 "Jumper",
                 create_selection_object({
@@ -574,6 +590,26 @@ const TILE_TYPES_OBJS = [
             return `CONV_BELT_EXPRESS_${direction_to_string(tile.direction)}_JOIN_${direction_to_string(tile.sourceDirection)}`;
             },
     },
+    {
+        tile_type: TILE_TYPES.Portal,
+        tile_type_string: "Portal",
+        from_xml_tile: (tile) => {
+            return {
+                tile_type: TILE_TYPES.Portal,
+                variant: tile.getElementsByTagName("variant")[0].innerHTML,
+            };
+            },
+        get_image_key: (tile) => {
+            return `PORTAL_${tile.variant}`;
+            },
+        verification: (map, tile) => {
+            return map.portal_dict[tile.variant].length === 2
+        },
+        extra_tags: (map, tile, parser, position) => {
+            let target_position = map.portal_dict[tile.variant][0].row === position.row && map.portal_dict[tile.variant][0].col === position.col ? map.portal_dict[tile.variant][1] : map.portal_dict[tile.variant][0];
+            parser.inline_tag("targetPosition", `${target_position.row},${target_position.col}`);
+        }
+    },
 ]
 
 const tile_to_image_key = (tile) => {
@@ -598,7 +634,12 @@ const string_to_tile_type_obj = (tile_type_string) => {
     return undefined;
 }
 
-const tile_to_xml = (tile, parser) => {
+const tile_to_xml = (tile, parser, map, position) => {
+    let tile_type_obj = get_tile_type_obj(tile.tile_type);
+    if (tile_type_obj.verification && !tile_type_obj.verification(map, tile)) {
+        tile_to_xml({tile_type: TILE_TYPES.OpenFloor}, parser);
+        return;
+    }
     parser.open_tag("tile");
     parser.inline_tag("tileType", get_tile_type_obj(tile.tile_type).tile_type_string);
     if (tile.variant !== undefined) {
@@ -609,6 +650,9 @@ const tile_to_xml = (tile, parser) => {
     }
     if (tile.sourceDirection !== undefined) {
         parser.inline_tag("sourceDirection", direction_to_string(tile.sourceDirection));
+    }
+    if (tile_type_obj.extra_tags) {
+        tile_type_obj.extra_tags(map, tile, parser, position);
     }
     if (tile.props && Object.entries(tile.props).length > 0) {
         parser.open_tag("props");

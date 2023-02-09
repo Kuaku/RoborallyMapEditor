@@ -13,6 +13,7 @@ const TILE_TYPES = {
     Flag: 7,
     Dock: 8,
     RepairSite: 9,
+    Jumper: 10,
 }
 
 const TILES_SELECTION_GROUP = create_selection_group(
@@ -23,6 +24,12 @@ const TILES_SELECTION_GROUP = create_selection_group(
         create_selection_object({
             tile_type: TILE_TYPES.Pit
         }),
+        create_selection_group(
+                "Jumper",
+                create_selection_object({
+                    tile_type: TILE_TYPES.Jumper
+                }),
+            ),
         create_selection_group(
                 "Repair Site",
                 create_selection_object({
@@ -370,6 +377,19 @@ const TILE_TYPES_OBJS = [
         },
         get_image_key:   (tile) => {
             return `REPAIR_SITE_${tile.variant}`;
+        },
+    },
+
+    {
+        tile_type: TILE_TYPES.Jumper,
+        tile_type_string: "Jumper",
+        from_xml_tile: (_tile) => {
+            return {
+                tile_type: TILE_TYPES.Jumper,
+            };
+            },
+        get_image_key: (_tile) => {
+            return "JUMPER"
         },
     },
 ]
